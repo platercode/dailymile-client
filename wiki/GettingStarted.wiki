@@ -8,7 +8,7 @@ You will want to do the authentication process once for each user and then save 
   String CONSUMER_SECRET = "<your app secret>";
 
   RequestToken token = DailyMileAuthenticator.obtainRequestToken(CONSUMER_KEY,
-			  CONSUMER_SECRET, "http://www.dailymile.com");
+			  CONSUMER_SECRET, "<call back url>");
 
   // token.getAuthorizeUrl() will contain the url that users can goto to authenticate
 
