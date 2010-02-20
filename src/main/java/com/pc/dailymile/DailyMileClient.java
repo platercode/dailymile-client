@@ -3,8 +3,6 @@ package com.pc.dailymile;
 import java.io.IOException;
 
 import oauth.signpost.OAuthConsumer;
-import oauth.signpost.OAuthProvider;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.HttpRequestAdapter;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
@@ -22,36 +20,11 @@ import org.apache.http.util.EntityUtils;
 import com.pc.dailymile.domain.Entry;
 import com.pc.dailymile.domain.UserStream;
 import com.pc.dailymile.domain.Workout;
-import com.pc.dailymile.signpost.extension.CommonsHttpOAuthPostProvider;
 import com.pc.dailymile.utils.DailyMileUtil;
 
 public class DailyMileClient {
 	
 	private OAuthConsumer oauthConsumer;
-	
-	/**
-	 * Retrieve the request token
-	 * 
-	 * @param consumerKey your applications consumer key
-	 * @param consumerSecret your applications consumer secret
-	 * @param callback the callback url registered for your application
-	 * @return the request token returned from dailymile
-	 * 
-	 * @throws Exception thrown if the token can't be fetched
-	 */
-	public static RequestToken obtainRequestToken(String consumerKey,
-			String consumerSecret, String callback) throws Exception {
-		OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey,
-				consumerSecret);
-
-		OAuthProvider provider = new CommonsHttpOAuthPostProvider(
-				DailyMileUtil.REQUEST_TOKEN_ENDPOINT_URL, 
-				DailyMileUtil.ACCESS_TOKEN_ENDPOINT_URL,
-				DailyMileUtil.AUTHORIZE_WEBSITE_URL);
-
-		String url = provider.retrieveRequestToken(consumer, callback);
-		return new RequestToken(provider, consumer, url);
-	}
 	
 	/**
 	 * Create a new DailyMileClient object that will use the provided
