@@ -11,30 +11,25 @@ public class DailyMileUtil {
 	public static final String AUTHORIZE_WEBSITE_URL = "http://api.dailymile.com/oauth/authorize";
 	
 	public static final String ENTRIES_URL = "http://api.dailymile.com/entries.json";
+	
 	private static final String COMMENT_URL = "http://api.dailymile.com/entries/{0}/comments.json";
-	private static final String DELETE_URL = "http://api.dailymile.com/entries/{0}.json";
+	private static final String USER_STREAM_URL = "http://api.dailymile.com/people/{0}/entries.json";
+	private static final String ENTRY_URL = "http://api.dailymile.com/entries/{0}.json";
+	
 	
 	public static Gson getGson() {
 		return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
 	}
 	
 	public static String buildUserStreamUrl(String username) {
-		return "http://api.dailymile.com/people/" + username
-			+ "/entries.json";
+		return MessageFormat.format(USER_STREAM_URL, username);
 	}
 	
 	public static String buildEntryUrl(Long id) {
-		return "http://api.dailymile.com/entries/" + id
-			+ ".json";
+		return MessageFormat.format(ENTRY_URL, id.toString());
 	}
 	
 	public static String buildCommentUrl(Long id){
 		return MessageFormat.format(COMMENT_URL, id.toString());
 	}
-	
-	public static String buildDeleteUrl(Long id){
-		return MessageFormat.format(DELETE_URL, id.toString());
-	}
-	
-	
 }
