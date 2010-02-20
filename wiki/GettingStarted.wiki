@@ -1,6 +1,6 @@
 = Authenticating =
 
-The authentication process use [http://oauth.net OAuth].
+The authentication process uses [http://oauth.net OAuth].
 You will want to do the authentication process once for each user and then save off their token and secret.
 
 {{{		
