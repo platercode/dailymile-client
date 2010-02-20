@@ -1,4 +1,4 @@
-package com.pc.dailymile;
+package com.pc.dailymile.auth;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
