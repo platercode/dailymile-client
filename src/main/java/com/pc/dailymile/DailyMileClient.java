@@ -19,7 +19,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import com.google.gson.Gson;
 import com.pc.dailymile.domain.Entry;
 import com.pc.dailymile.domain.UserStream;
 import com.pc.dailymile.domain.Workout;

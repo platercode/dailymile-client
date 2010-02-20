@@ -7,11 +7,12 @@ import com.pc.dailymile.utils.Type;
 import com.pc.dailymile.utils.Units;
 
 /*
- * "workout":{"felt":"good",
+ *           {"felt":"good",
  *            "type":"running",
  *            "duration":1645,
  *            "distance":{"units":"miles",
- *                        "value":3.1}
+ *                        "value":3.1},
+ *            "completed_at":"2010-01-01 00:00:01"
  *            },
  */
 public class Workout {
@@ -54,8 +55,16 @@ public class Workout {
 		distance.setUnits(units);
 	}
 	
+	public Units getDistanceUnits() {
+		return distance.getUnits();
+	}
+	
 	public void setDistanceValue(String value) {
 		distance.setValue(value);
+	}
+	
+	public String getDistanceValue(){
+		return distance.getValue();
 	}
 	
 	public Date getCompleted_at() {
