@@ -87,6 +87,22 @@ public class DailyMileClient {
 		return getEntry(id).getWorkout();
 	}
 	
+	/**
+	 * Adds to provided comment to the entry with the 
+	 * provided id
+	 * 
+	 * @param comment comment to add
+	 * @param id id of the entry to add the comment to
+	 */
+	public void addComment(String comment, Long id) {
+		String body = "{\"body\":\"" + comment +"\"}";
+		try {
+			doAuthenticatedPost(DailyMileUtil.buildCommentUrl(id), body);
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to add comment",e);
+		}
+	}
+	
 	private Entry getEntry(Long id) {
 		return DailyMileUtil.getGson().fromJson(getResource(DailyMileUtil
 				.buildEntryUrl(id)), Entry.class);
@@ -101,6 +117,11 @@ public class DailyMileClient {
 	 * @throws Exception thrown if the add fails
 	 */
 	private void addEntry(Entry entry) throws Exception {
+		String json = DailyMileUtil.getGson().toJson(entry);
+		doAuthenticatedPost(DailyMileUtil.ENTRIES_URL, json);
+	}
+	
+	private void doAuthenticatedPost(String url, String body) throws Exception {
 		
 		if (oauthConsumer.getConsumerKey() == null
 				|| oauthConsumer.getConsumerSecret() == null) {
@@ -108,11 +129,10 @@ public class DailyMileClient {
 					"Consumer key or secret not set");
 		}
 		HttpClient httpClient = new DefaultHttpClient();
-		HttpPost request = new HttpPost(DailyMileUtil.ENTRIES_URL);
+		HttpPost request = new HttpPost(url);
 		HttpResponse response = null;
 		try {
-			String json = DailyMileUtil.getGson().toJson(entry);
-			HttpEntity entity = new StringEntity(json);
+			HttpEntity entity = new StringEntity(body);
 			//set the content type to json
 			request.setHeader("Content-Type", "application/json; charset=utf-8");
 			request.setEntity(entity);
@@ -122,7 +142,8 @@ public class DailyMileClient {
 			response = httpClient.execute(request);
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode == 401) {
-				throw new RuntimeException("unable to add entry - " + json);
+				throw new RuntimeException("unable to exectue POST - url: "
+						+ url + " body: " + body);
 			}
 		} catch (OAuthExpectationFailedException e) {
 			throw e;
