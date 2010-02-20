@@ -12,6 +12,7 @@ public class DailyMileUtil {
 	
 	public static final String ENTRIES_URL = "http://api.dailymile.com/entries.json";
 	private static final String COMMENT_URL = "http://api.dailymile.com/entries/{0}/comments.json";
+	private static final String DELETE_URL = "http://api.dailymile.com/entries/{0}.json";
 	
 	public static Gson getGson() {
 		return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
@@ -29,6 +30,10 @@ public class DailyMileUtil {
 	
 	public static String buildCommentUrl(Long id){
 		return MessageFormat.format(COMMENT_URL, id.toString());
+	}
+	
+	public static String buildDeleteUrl(Long id){
+		return MessageFormat.format(DELETE_URL, id.toString());
 	}
 	
 	

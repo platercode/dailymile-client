@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -74,7 +75,11 @@ public class DailyMileClient {
 	 * @param id id of the entry to delete
 	 */
 	public void deleteEntry(Long id) {
-		throw new UnsupportedOperationException("delete isn't supported yet");
+		try {
+			doAuthenticatedDelete(DailyMileUtil.buildDeleteUrl(id));
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to delete entry", e);
+		}
 	}
 
 	/**
@@ -144,6 +149,46 @@ public class DailyMileClient {
 			if (statusCode == 401) {
 				throw new RuntimeException("unable to exectue POST - url: "
 						+ url + " body: " + body);
+			}
+		} catch (OAuthExpectationFailedException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new OAuthCommunicationException(e);
+		} finally {
+			if (response != null) {
+				HttpEntity entity = response.getEntity();
+				if (entity != null) {
+					try {
+						entity.consumeContent();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	private void doAuthenticatedDelete(String url) throws Exception {
+		
+		if (oauthConsumer.getConsumerKey() == null
+				|| oauthConsumer.getConsumerSecret() == null) {
+			throw new OAuthExpectationFailedException(
+					"Consumer key or secret not set");
+		}
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpDelete request = new HttpDelete(url);
+		HttpResponse response = null;
+		try {
+			//set the content type to json
+			request.setHeader("Content-Type", "application/json; charset=utf-8");
+			//sign the request
+			oauthConsumer.sign(new HttpRequestAdapter(request));
+			//send the request
+			response = httpClient.execute(request);
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode == 401) {
+				throw new RuntimeException("unable to exectue DELETE - url: "
+						+ url);
 			}
 		} catch (OAuthExpectationFailedException e) {
 			throw e;
