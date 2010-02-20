@@ -46,8 +46,42 @@ The authentication process use OAuth (http://oauth.net/).  You will want to do t
 
 = Fetching a user stream =
 {{{
-  UserStream s = DailyMileClient.getUserStream("someUserName");
+  String CONSUMER_KEY = "<your app key>";
+  String CONSUMER_SECRET = "<your app secret>";
+  OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY,
+                                           CONSUMER_SECRET);
+				
+  consumer.setTokenWithSecret(accessToken, accessSecret);
+
+  DailyMileClient client = new DailyMileClient(consumer);
+  UserStream s = client.getUserStream("someUserName");
   for (Entry e : s.getEntries()) {
     ...
   }
+}}}
+
+= Fetching a workout =
+{{{
+  String CONSUMER_KEY = "<your app key>";
+  String CONSUMER_SECRET = "<your app secret>";
+  OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY,
+                                           CONSUMER_SECRET);
+				
+  consumer.setTokenWithSecret(accessToken, accessSecret);
+
+  DailyMileClient client = new DailyMileClient(consumer);	 
+  Workout wo = client.getWorkout(<id of workout>);
+}}}
+
+= Adding a comment =
+{{{
+  String CONSUMER_KEY = "<your app key>";
+  String CONSUMER_SECRET = "<your app secret>";
+  OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY,
+                                           CONSUMER_SECRET);
+				
+  consumer.setTokenWithSecret(accessToken, accessSecret);
+
+  DailyMileClient client = new DailyMileClient(consumer);	 
+  client.addComment("wow - nice job!", <id of workout>);
 }}}
