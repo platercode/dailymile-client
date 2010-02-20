@@ -88,3 +88,16 @@ You will want to do the authentication process once for each user and then save 
   DailyMileClient client = new DailyMileClient(consumer);	 
   client.addComment("wow - nice job!", <id of workout>);
 }}}
+
+= Deleting an entry (such as a workout) =
+{{{
+  String CONSUMER_KEY = "<your app key>";
+  String CONSUMER_SECRET = "<your app secret>";
+  OAuthConsumer consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY,
+                                           CONSUMER_SECRET);
+				
+  consumer.setTokenWithSecret(accessToken, accessSecret);
+
+  DailyMileClient client = new DailyMileClient(consumer);	 
+  client.deleteEntry(<id of entry>);
+}}}
