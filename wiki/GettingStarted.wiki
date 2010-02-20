@@ -1,8 +1,10 @@
 = Authenticating =
 
-The authentication process use OAuth (http://oauth.net/).  You will want to do the authentication process once for each user and then save off their token and secret.
+The authentication process use [http://oauth.net OAuth].  You will want to do the authentication process once for each user and then save off their token and secret.
 
 {{{		
+  String CONSUMER_KEY = "<your app key>";
+  String CONSUMER_SECRET = "<your app secret>";
 
   RequestToken token = DailyMileAuthenticator.obtainRequestToken(CONSUMER_KEY,
 			  CONSUMER_SECRET, "http://www.dailymile.com");
