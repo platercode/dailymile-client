@@ -76,7 +76,7 @@ public class DailyMileClient {
 	 */
 	public void deleteEntry(Long id) {
 		try {
-			doAuthenticatedDelete(DailyMileUtil.buildDeleteUrl(id));
+			doAuthenticatedDelete(DailyMileUtil.buildEntryUrl(id));
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to delete entry", e);
 		}
