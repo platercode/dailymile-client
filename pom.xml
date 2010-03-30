@@ -56,13 +56,13 @@
       <dependency> 
         <groupId>oauth.signpost</groupId> 
         <artifactId>signpost-core</artifactId> 
-        <version>1.2</version> 
+        <version>1.2.1.1</version> 
         <scope>compile</scope> 
       </dependency> 
       <dependency> 
         <groupId>oauth.signpost</groupId> 
         <artifactId>signpost-commonshttp4</artifactId> 
-        <version>1.2</version> 
+        <version>1.2.1.1</version> 
         <scope>compile</scope> 
       </dependency> 
       <dependency>
@@ -77,6 +77,16 @@
     <repository>
       <id>gson</id>
       <url>http://google-gson.googlecode.com/svn/mavenrepo</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+    <repository>
+      <id>signpost-releases</id>
+      <url>http://oss.sonatype.org/content/repositories/signpost-releases</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
