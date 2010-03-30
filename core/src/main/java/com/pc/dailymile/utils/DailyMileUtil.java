@@ -18,7 +18,8 @@ public class DailyMileUtil {
 	
 	
 	public static Gson getGson() {
-		return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		//2010-03-29T21:25:09-04:00
+		return new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.Z").create();
 	}
 	
 	public static String buildUserStreamUrl(String username) {
