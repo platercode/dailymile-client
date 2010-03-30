@@ -3,8 +3,8 @@ package com.pc.dailymile.auth;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 
-import com.pc.dailymile.signpost.extension.CommonsHttpOAuthPostProvider;
 import com.pc.dailymile.utils.DailyMileUtil;
 
 public class DailyMileAuthenticator {
@@ -24,7 +24,7 @@ public class DailyMileAuthenticator {
 		OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey,
 				consumerSecret);
 
-		OAuthProvider provider = new CommonsHttpOAuthPostProvider(
+		OAuthProvider provider = new CommonsHttpOAuthProvider(
 				DailyMileUtil.REQUEST_TOKEN_ENDPOINT_URL, 
 				DailyMileUtil.ACCESS_TOKEN_ENDPOINT_URL,
 				DailyMileUtil.AUTHORIZE_WEBSITE_URL);

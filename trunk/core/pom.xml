@@ -28,7 +28,7 @@
       <groupId>oauth.signpost</groupId> 
       <artifactId>signpost-core</artifactId> 
     </dependency> 
-        <dependency> 
+    <dependency> 
       <groupId>oauth.signpost</groupId> 
       <artifactId>signpost-commonshttp4</artifactId> 
     </dependency> 
