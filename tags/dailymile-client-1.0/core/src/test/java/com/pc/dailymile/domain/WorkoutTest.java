@@ -26,7 +26,7 @@ public class WorkoutTest {
 	@Test
 	public void testWorkoutToJson() throws Exception {
 		String expected = "{\"felt\":\"good\",\"type\":\"running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"}," +
-				"\"completed_at\":\"2010-01-01 00:00:01\"}";
+				"\"completed_at\":\"2010-01-01T00:00:01.-0500\"}";
 		Workout wo = new Workout();
 		wo.setDistanceUnits(Units.miles);
 		wo.setDistanceValue("2");
@@ -47,7 +47,7 @@ public class WorkoutTest {
 	@Test
 	public void testJsonToWorkout() throws Exception {
 		String json = "{\"felt\":\"good\",\"type\":\"running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"}," +
-				"\"completed_at\":\"2010-01-01 00:00:01\"}";
+				"\"completed_at\":\"2010-01-01T00:00:01.-0500\"}";
 		
 		Workout wo = DailyMileUtil.getGson().fromJson(json, Workout.class);
 		
