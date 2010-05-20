@@ -12,10 +12,12 @@ public class DailyMileUtil {
 	
 	public static final String ENTRIES_URL = "http://api.dailymile.com/entries.json";
 	
+	public static final String USER_AND_FRIENDS_STREAM_URL = "http://api.dailymile.com/entries/friends.json";
+
 	private static final String COMMENT_URL = "http://api.dailymile.com/entries/{0}/comments.json";
 	private static final String USER_STREAM_URL = "http://api.dailymile.com/people/{0}/entries.json";
 	private static final String ENTRY_URL = "http://api.dailymile.com/entries/{0}.json";
-	
+		
 	
 	public static Gson getGson() {
 		//2010-03-29T21:25:09-04:00
