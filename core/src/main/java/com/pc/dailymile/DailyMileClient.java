@@ -10,12 +10,23 @@ import oauth.signpost.exception.OAuthExpectationFailedException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import com.pc.dailymile.domain.Entry;
@@ -26,6 +37,7 @@ import com.pc.dailymile.utils.DailyMileUtil;
 public class DailyMileClient {
 	
 	private OAuthConsumer oauthConsumer;
+	private HttpClient httpClient;
 	
 	/**
 	 * Create a new DailyMileClient object that will use the provided
@@ -35,6 +47,7 @@ public class DailyMileClient {
 	 */
 	public DailyMileClient(OAuthConsumer oauthConsumer){
 		this.oauthConsumer = oauthConsumer;
+		initHttpClient();
 	}
 
 	/**
@@ -48,6 +61,15 @@ public class DailyMileClient {
 	public UserStream getUserStream(String username) {
 		return DailyMileUtil.getGson().fromJson(getResource(DailyMileUtil
 				.buildUserStreamUrl(username)), UserStream.class);
+	}
+
+	/**
+	 * Retrieve a stream belonging to the user and the user's friends.
+	 */
+	public UserStream getUserAndFriendsStream() {
+		return DailyMileUtil.getGson().fromJson(
+				getSecuredResource(DailyMileUtil.USER_AND_FRIENDS_STREAM_URL),
+				UserStream.class);
 	}
 
 	/**
@@ -107,6 +129,27 @@ public class DailyMileClient {
 			throw new RuntimeException("Unable to add comment",e);
 		}
 	}
+
+	
+	private void initHttpClient() {
+		HttpParams parameters = new BasicHttpParams();
+		HttpProtocolParams.setVersion(parameters, HttpVersion.HTTP_1_1);
+		//set the User-Agent to a common User-Agent because currently
+		//the default httpclient User-Agent doesn't work with dailymile
+		HttpProtocolParams.setContentCharset(parameters,
+				HTTP.DEFAULT_CONTENT_CHARSET);
+		HttpProtocolParams.setUserAgent(parameters,
+				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)");
+		HttpProtocolParams.setUseExpectContinue(parameters, false);
+		HttpConnectionParams.setTcpNoDelay(parameters, true);
+
+		SchemeRegistry schReg = new SchemeRegistry();
+		schReg.register(new Scheme("http", PlainSocketFactory
+				.getSocketFactory(), 80));
+		ClientConnectionManager tsccm = new ThreadSafeClientConnManager(
+				parameters, schReg);
+		httpClient = new DefaultHttpClient(tsccm, parameters);
+	}
 	
 	private Entry getEntry(Long id) {
 		return DailyMileUtil.getGson().fromJson(getResource(DailyMileUtil
@@ -147,7 +190,7 @@ public class DailyMileClient {
 			response = httpClient.execute(request);
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode == 401) {
-				throw new RuntimeException("unable to exectue POST - url: "
+				throw new RuntimeException("unable to execute POST - url: "
 						+ url + " body: " + body);
 			}
 		} catch (OAuthExpectationFailedException e) {
@@ -187,7 +230,7 @@ public class DailyMileClient {
 			response = httpClient.execute(request);
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (statusCode == 401) {
-				throw new RuntimeException("unable to exectue DELETE - url: "
+				throw new RuntimeException("unable to execute DELETE - url: "
 						+ url);
 			}
 		} catch (OAuthExpectationFailedException e) {
@@ -211,13 +254,7 @@ public class DailyMileClient {
 	// no authentication
 	private String getResource(String url) {
 		HttpGet request = new HttpGet(url);
-		//set the User-Agent to a common User-Agent because currently
-		//the default httpclient User-Agent doesn't work with dailymile
-		request.setHeader("User-Agent",
-				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)");
-		
 		HttpResponse response = null;
-		HttpClient httpClient = new DefaultHttpClient();
 		try {
 			response = httpClient.execute(request);
 			int statusCode = response.getStatusLine().getStatusCode();
@@ -230,7 +267,27 @@ public class DailyMileClient {
 			return EntityUtils.toString(entity);
 
 		} catch (Exception e) {
-			throw new RuntimeException("Unable to get resouce", e);
+			throw new RuntimeException("Unable to get resource", e);
+		}
+	}
+	
+		
+	// handles the few API resources that require oauth
+	private String getSecuredResource(String url) {
+		HttpGet request = new HttpGet(url);		
+		HttpResponse response = null;
+		try {
+			oauthConsumer.sign(new HttpRequestAdapter(request));
+			response = httpClient.execute(request);
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != 200) {
+				throw new RuntimeException("Unable to get resource: " + url);
+			}
+			// Get hold of the response entity
+			HttpEntity entity = response.getEntity();
+			return EntityUtils.toString(entity);
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to get resource", e);
 		}
 	}
 
