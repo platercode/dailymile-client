@@ -67,9 +67,14 @@ public class DailyMileClient {
 	 * Retrieve a stream belonging to the user and the user's friends.
 	 */
 	public UserStream getUserAndFriendsStream() {
-		return DailyMileUtil.getGson().fromJson(
-				getSecuredResource(DailyMileUtil.USER_AND_FRIENDS_STREAM_URL),
-				UserStream.class);
+		try {
+			return DailyMileUtil.getGson().fromJson(
+							getSecuredResource(DailyMileUtil.USER_AND_FRIENDS_STREAM_URL),
+							UserStream.class);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Unable to fetch user and friends stream", e);
+		}
 	}
 
 	/**
@@ -273,7 +278,13 @@ public class DailyMileClient {
 	
 		
 	// handles the few API resources that require oauth
-	private String getSecuredResource(String url) {
+	private String getSecuredResource(String url) throws OAuthExpectationFailedException {
+		
+		if (oauthConsumer.getConsumerKey() == null
+				|| oauthConsumer.getConsumerSecret() == null) {
+			throw new OAuthExpectationFailedException(
+					"Consumer key or secret not set");
+		}
 		HttpGet request = new HttpGet(url);		
 		HttpResponse response = null;
 		try {
