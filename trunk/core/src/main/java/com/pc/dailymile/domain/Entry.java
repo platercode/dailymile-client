@@ -1,5 +1,9 @@
 package com.pc.dailymile.domain;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 
 /*
  * {
@@ -33,6 +37,7 @@ public class Entry {
 	private Long id;
 	private Workout workout;
 	private String message;
+	private User user;
 	
 	public Entry() {
 		
@@ -60,6 +65,41 @@ public class Entry {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	public void setUser(User user){
+		this.user = user;
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("id", id).append("message",
+				message).append("user", user).append("workout", workout)
+				.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(11, 31).append(id).append(message).append(
+				user).append(workout).toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Entry other = (Entry) obj;
+		return new EqualsBuilder().append(id, other.id).append(message,
+				other.message).append(user, other.user).append(workout,
+				other.workout).isEquals();
 	}
 	
 }

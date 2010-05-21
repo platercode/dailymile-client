@@ -2,6 +2,10 @@ package com.pc.dailymile.domain;
 
 import java.util.Date;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.pc.dailymile.utils.Feeling;
 import com.pc.dailymile.utils.Type;
 import com.pc.dailymile.utils.Units;
@@ -74,5 +78,33 @@ public class Workout {
 
 	public void setCompleted_at(Date completedAt) {
 		completed_at = completedAt;
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).append("completed_at", completed_at)
+				.append("distance", distance).append("duration", duration)
+				.append("felt", felt).append("type", type).toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(7, 29).append(completed_at).append(distance)
+				.append(duration).append(felt).append(type).toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Workout other = (Workout) obj;
+		return new EqualsBuilder().append(completed_at, other.completed_at)
+				.append(distance, other.distance).append(duration,
+						other.duration).append(felt, other.felt).append(type,
+						other.type).isEquals();
 	}
 }
