@@ -36,11 +36,10 @@ public class UserStream {
 	}
 
 	public Set<Entry> getEntries() {
-		return entries;
+		return new TreeSet<Entry>(entries);
 	}
 
 	public void setEntries(Set<Entry> entries) {
 		this.entries = new TreeSet<Entry>(entries);
 	}
-	
 }
