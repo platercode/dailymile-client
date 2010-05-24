@@ -26,6 +26,7 @@ public class Workout {
 	private Long duration;
 	private Distance distance;
 	private Date completed_at;
+	private String title;
 
 	public Workout() {
 		this.distance = new Distance();
@@ -86,17 +87,27 @@ public class Workout {
 		completed_at = completedAt;
 	}
 	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("completed_at", completed_at)
 				.append("distance", distance).append("duration", duration)
-				.append("felt", felt).append("type", type).toString();
+				.append("felt", felt).append("type", type)
+				.append("title",title).toString();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(7, 29).append(completed_at).append(distance)
-				.append(duration).append(felt).append(type).toHashCode();
+				.append(duration).append(felt).append(type)
+				.append(title).toHashCode();
 	}
 
 	@Override
@@ -111,6 +122,6 @@ public class Workout {
 		return new EqualsBuilder().append(completed_at, other.completed_at)
 				.append(distance, other.distance).append(duration,
 						other.duration).append(felt, other.felt).append(type,
-						other.type).isEquals();
+						other.type).append(title, other.title).isEquals();
 	}
 }
