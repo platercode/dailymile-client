@@ -117,16 +117,16 @@ public class Entry implements Comparable<Entry>{
 	}
 
 	public int compareTo(Entry o) {
-		int dateVal = o.getDate().compareTo(getDate());
-		if (dateVal == 0) {
+		int ret = o.getDate().compareTo(getDate());
+		if (ret == 0) {
 			if (this.equals(o)) {
 				//they are truly equal
-				return dateVal;
+				return ret;
 			}
 			//use the id as the tie breaker
-			return o.getId().compareTo(getId());
+			ret = o.getId().compareTo(getId());
 		}
-		return dateVal;
+		return ret;
 	}
 	
 }
