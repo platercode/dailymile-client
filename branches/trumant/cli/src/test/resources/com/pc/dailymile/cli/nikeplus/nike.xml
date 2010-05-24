@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<plusService>
+	<status>success</status>
+	<runList endIndex="-1" startIndex="0">
+		<run id="272570193" workoutType="standard">
+			<startTime>2008-08-21T18:50:18-04:00</startTime>
+			<distance>3.4144</distance>
+			<duration>1163603</duration>
+			<syncTime>2008-08-22T23:52:16+00:00</syncTime>
+			<calories>295.0</calories>
+			<name />
+			<description />
+			<howFelt />
+			<weather />
+			<terrain />
+		</run>
+		<run id="876575802" workoutType="standard">
+			<startTime>2008-08-22T18:02:01-04:00</startTime>
+			<distance>5.1584</distance>
+			<duration>1732809</duration>
+			<syncTime>2008-08-22T23:52:16+00:00</syncTime>
+			<calories>445.0</calories>
+			<name />
+			<description />
+			<howFelt />
+			<weather />
+			<terrain />
+		</run>
+	</runList>
+</plusService>
