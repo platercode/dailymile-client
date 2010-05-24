@@ -1,6 +1,7 @@
 package com.pc.dailymile.domain;
 
 import java.util.Set;
+import java.util.TreeSet;
 /*
  * {"entries":[{
  * "permalink":"http://www.dailymile.com/entries/978880",
@@ -39,7 +40,7 @@ public class UserStream {
 	}
 
 	public void setEntries(Set<Entry> entries) {
-		this.entries = entries;
+		this.entries = new TreeSet<Entry>(entries);
 	}
 	
 }

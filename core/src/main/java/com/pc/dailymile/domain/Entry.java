@@ -1,8 +1,12 @@
 package com.pc.dailymile.domain;
 
+import java.util.Date;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import com.google.gson.annotations.SerializedName;
 
 
 /*
@@ -32,12 +36,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * }
  */
 
-public class Entry {
+public class Entry implements Comparable<Entry>{
 
 	private Long id;
 	private Workout workout;
 	private String message;
 	private User user;
+	@SerializedName("created_at")
+	private Date date;
 	
 	public Entry() {
 		
@@ -75,17 +81,25 @@ public class Entry {
 		this.user = user;
 	}
 	
+	public Date getDate() {
+		return date;
+	}
+	
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append("id", id).append("message",
 				message).append("user", user).append("workout", workout)
-				.toString();
+				.append("date", date).toString();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(11, 31).append(id).append(message).append(
-				user).append(workout).toHashCode();
+				user).append(workout).append(date).toHashCode();
 	}
 
 	@Override
@@ -99,7 +113,20 @@ public class Entry {
 		Entry other = (Entry) obj;
 		return new EqualsBuilder().append(id, other.id).append(message,
 				other.message).append(user, other.user).append(workout,
-				other.workout).isEquals();
+				other.workout).append(date, other.date).isEquals();
+	}
+
+	public int compareTo(Entry o) {
+		int dateVal = o.getDate().compareTo(getDate());
+		if (dateVal == 0) {
+			if (this.equals(o)) {
+				//they are truly equal
+				return dateVal;
+			}
+			//use the id as the tie breaker
+			return o.getId().compareTo(getId());
+		}
+		return dateVal;
 	}
 	
 }
