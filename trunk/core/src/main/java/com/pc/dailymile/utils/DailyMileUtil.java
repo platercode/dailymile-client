@@ -1,9 +1,11 @@
 package com.pc.dailymile.utils;
 
 import java.text.MessageFormat;
+import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pc.dailymile.domain.converters.DateConverter;
 import com.pc.dailymile.domain.converters.TypeConverter;
 
 public class DailyMileUtil {
@@ -22,7 +24,8 @@ public class DailyMileUtil {
 	//date format: 2010-03-29T21:25:09-04:00
 	private static final GsonBuilder gsonBuilder = new GsonBuilder()
 			.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.Z")
-			.registerTypeAdapter(Type.class, new TypeConverter());
+			.registerTypeAdapter(Type.class, new TypeConverter())
+			.registerTypeAdapter(Date.class, new DateConverter());
 	
 	public static Gson getGson() {
 		return gsonBuilder.create();
