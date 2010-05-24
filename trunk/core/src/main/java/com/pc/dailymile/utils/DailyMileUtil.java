@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.pc.dailymile.domain.converters.TypeConverter;
 
 public class DailyMileUtil {
 	public static final String REQUEST_TOKEN_ENDPOINT_URL = "http://api.dailymile.com/oauth/request_token";
@@ -18,10 +19,13 @@ public class DailyMileUtil {
 	private static final String USER_STREAM_URL = "http://api.dailymile.com/people/{0}/entries.json";
 	private static final String ENTRY_URL = "http://api.dailymile.com/entries/{0}.json";
 		
+	//date format: 2010-03-29T21:25:09-04:00
+	private static final GsonBuilder gsonBuilder = new GsonBuilder()
+			.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.Z")
+			.registerTypeAdapter(Type.class, new TypeConverter());
 	
 	public static Gson getGson() {
-		//2010-03-29T21:25:09-04:00
-		return new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.Z").create();
+		return gsonBuilder.create();
 	}
 	
 	public static String buildUserStreamUrl(String username) {
@@ -32,7 +36,7 @@ public class DailyMileUtil {
 		return MessageFormat.format(ENTRY_URL, id.toString());
 	}
 	
-	public static String buildCommentUrl(Long id){
+	public static String buildCommentUrl(Long id) {
 		return MessageFormat.format(COMMENT_URL, id.toString());
 	}
 }

@@ -11,6 +11,13 @@ public enum Type {
 	cycling,
 	swimming,
 	walking,
-	fitness
+	fitness,
+	weights,
+	crossfit,
+	elliptical,
+	hiking,
+	yoga,
+	rowing,
+	unknown
 	;
 }
