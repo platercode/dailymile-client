@@ -12,17 +12,7 @@ import com.pc.dailymile.utils.Feeling;
 import com.pc.dailymile.utils.Type;
 import com.pc.dailymile.utils.Units;
 public class WorkoutTest {
-	
-	/*
-	 *           {"felt":"good",
-	 *            "type":"running",
-	 *            "duration":1645,
-	 *            "distance":{"units":"miles",
-	 *                        "value":3.1},
-	 *            "completed_at":"2010-01-01 00:00:01"
-	 *            },
-	 */
-	
+		
 	@Test
 	public void testWorkoutToJson() throws Exception {
 		String expected = "{\"felt\":\"good\",\"type\":\"running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"}," +
@@ -69,25 +59,15 @@ public class WorkoutTest {
 	
 	
 	@Test
-	public void testJsonWithUnknowTypeToWorkout() throws Exception {
-		String json = "{\"felt\":\"good\",\"type\":\"rolling\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"}," +
-				"\"completed_at\":\"2010-01-01T00:00:01.-0500\"}";
-		
+	public void testJsonToWorkoutWhenTypeIsUnrecognized() throws Exception {
+		String json = "{\"felt\":\"good\",\"type\":\"ccskiing\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
+				+ "\"completed_at\":\"2010-01-01T00:00:01.-0500\"}";
+
 		Workout wo = DailyMileUtil.getGson().fromJson(json, Workout.class);
-		
+
 		assertEquals(Units.miles, wo.getDistanceUnits());
 		assertEquals("2", wo.getDistanceValue());
 		assertEquals(Feeling.good, wo.getFelt());
 		assertEquals(Type.unknown, wo.getType());
-		
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.DAY_OF_YEAR, 1);
-		cal.set(Calendar.YEAR, 2010);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 1);
-		cal.set(Calendar.MILLISECOND, 0);
-		
-		assertEquals(cal.getTime(), wo.getCompleted_at());
 	}
 }
