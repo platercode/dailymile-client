@@ -49,6 +49,19 @@ public class DailyMileClient {
 		this.oauthConsumer = oauthConsumer;
 		initHttpClient();
 	}
+	
+	/**
+	 * Create a new DailyMileClient object that will use the provided
+	 * OAuthConsumer to sign requests and the provided HttpClient.
+	 * 
+	 * Note: Daily Mile might not work with all useragents
+	 * 
+	 * @param oauthConsumer a valid OAuthConsumer that can be used to sign requests
+	 */
+	public DailyMileClient(OAuthConsumer oauthConsumer, HttpClient httpClient){
+		this.oauthConsumer = oauthConsumer;
+		this.httpClient = httpClient;
+	}
 
 	/**
 	 * Retrieve a users stream.  A users stream contains
@@ -181,7 +194,6 @@ public class DailyMileClient {
 			throw new OAuthExpectationFailedException(
 					"Consumer key or secret not set");
 		}
-		HttpClient httpClient = new DefaultHttpClient();
 		HttpPost request = new HttpPost(url);
 		HttpResponse response = null;
 		try {
@@ -223,7 +235,6 @@ public class DailyMileClient {
 			throw new OAuthExpectationFailedException(
 					"Consumer key or secret not set");
 		}
-		HttpClient httpClient = new DefaultHttpClient();
 		HttpDelete request = new HttpDelete(url);
 		HttpResponse response = null;
 		try {
