@@ -47,10 +47,16 @@ public class Workout {
 		this.type = type;
 	}
 
+	/**
+	 * @return the duration in seconds
+	 */
 	public Long getDuration() {
 		return duration;
 	}
 
+	/**
+	 * @param duration the duration in seconds
+	 */
 	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
