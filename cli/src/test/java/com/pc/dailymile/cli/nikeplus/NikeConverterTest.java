@@ -48,7 +48,7 @@ public class NikeConverterTest {
 			cal.set(Calendar.SECOND, 18);
 			cal.set(Calendar.MILLISECOND, 0);
 			
-			assertEquals(cal.getTime(), wo.getCompleted_at());
+			assertEquals(cal.getTime(), wo.getCompletedDate());
 			
 			//test the parsing of the second one
 			wo = nc.createWorkout(runs.item(1));
@@ -66,7 +66,7 @@ public class NikeConverterTest {
 			cal.set(Calendar.SECOND, 01);
 			cal.set(Calendar.MILLISECOND, 0);
 			
-			assertEquals(cal.getTime(), wo.getCompleted_at());
+			assertEquals(cal.getTime(), wo.getCompletedDate());
 			
 		} catch (Exception e) {
 			e.printStackTrace();
