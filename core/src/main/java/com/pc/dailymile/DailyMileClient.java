@@ -17,10 +17,18 @@
 package com.pc.dailymile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -30,6 +38,7 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -38,6 +47,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import com.pc.dailymile.domain.Entry;
@@ -49,6 +59,7 @@ import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.HttpRequestAdapter;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
+
 
 public class DailyMileClient {
 
@@ -175,9 +186,9 @@ public class DailyMileClient {
     private void initHttpClient() {
         HttpParams parameters = new BasicHttpParams();
         HttpProtocolParams.setVersion(parameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(parameters, HTTP.DEFAULT_CONTENT_CHARSET);
         // set the User-Agent to a common User-Agent because currently
         // the default httpclient User-Agent doesn't work with dailymile
-        HttpProtocolParams.setContentCharset(parameters, HTTP.DEFAULT_CONTENT_CHARSET);
         HttpProtocolParams.setUserAgent(parameters,
                 "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)");
         HttpProtocolParams.setUseExpectContinue(parameters, false);
@@ -186,7 +197,35 @@ public class DailyMileClient {
         SchemeRegistry schReg = new SchemeRegistry();
         schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
         ClientConnectionManager tsccm = new ThreadSafeClientConnManager(parameters, schReg);
-        httpClient = new DefaultHttpClient(tsccm, parameters);
+        
+        DefaultHttpClient defaultHttpClient = new DefaultHttpClient(tsccm, parameters);
+        defaultHttpClient.addRequestInterceptor(new HttpRequestInterceptor() {
+            public void process(final HttpRequest request, final HttpContext context)
+                throws HttpException, IOException {
+                if (!request.containsHeader("Accept-Encoding")) {
+                    request.addHeader("Accept-Encoding", "gzip");
+                }
+            }
+        });
+
+        defaultHttpClient.addResponseInterceptor(new HttpResponseInterceptor() {
+            public void process(final HttpResponse response, final HttpContext context)
+                throws HttpException, IOException {
+                HttpEntity entity = response.getEntity();
+                Header ceheader = entity.getContentEncoding();
+                if (ceheader != null) {
+                    HeaderElement[] codecs = ceheader.getElements();
+                    for (int i = 0; i < codecs.length; i++) {
+                        if (codecs[i].getName().equalsIgnoreCase("gzip")) {
+                            response.setEntity(
+                                new GzipDecompressingEntity(response.getEntity()));
+                            return;
+                        }
+                    }
+                }
+            }
+        });
+        httpClient = defaultHttpClient;
     }
 
     private Entry getEntry(Long id) {
@@ -326,6 +365,25 @@ public class DailyMileClient {
             return EntityUtils.toString(entity);
         } catch (Exception e) {
             throw new RuntimeException("Unable to get resource", e);
+        }
+    }
+    
+    static class GzipDecompressingEntity extends HttpEntityWrapper {
+
+        public GzipDecompressingEntity(final HttpEntity entity) {
+            super(entity);
+        }
+
+        @Override
+        public InputStream getContent() throws IOException, IllegalStateException {
+            InputStream wrappedin = wrappedEntity.getContent();
+            return new GZIPInputStream(wrappedin);
+        }
+
+        @Override
+        public long getContentLength() {
+            // length of ungzipped content is not known
+            return -1;
         }
     }
 
