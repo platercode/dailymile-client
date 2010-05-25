@@ -19,6 +19,10 @@ package com.pc.dailymile.domain;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /*
  * {"entries":[{
  * "permalink":"http://www.dailymile.com/entries/978880",
@@ -54,5 +58,27 @@ public class UserStream {
 
     public void setEntries(Set<Entry> entries) {
         this.entries = new TreeSet<Entry>(entries);
+    }
+    
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("entries", getEntries()).toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(11, 31).append(getEntries()).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UserStream other = (UserStream) obj;
+        return new EqualsBuilder().append(getEntries(), other.getEntries()).isEquals();
     }
 }
