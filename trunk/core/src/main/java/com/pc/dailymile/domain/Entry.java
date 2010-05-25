@@ -17,6 +17,8 @@
 package com.pc.dailymile.domain;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -59,6 +61,7 @@ public class Entry implements Comparable<Entry> {
     private User user;
     @SerializedName("created_at")
     private Date date;
+    private Set<Comment> comments;
 
     public Entry() {
 
@@ -102,6 +105,14 @@ public class Entry implements Comparable<Entry> {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+    
+    public Set<Comment> getComments() {
+        return new TreeSet<Comment>(comments);
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = new TreeSet<Comment>(comments);
     }
 
     @Override
