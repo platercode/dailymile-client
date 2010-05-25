@@ -1,5 +1,7 @@
 package com.pc.dailymile.domain;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Set;
 
 import org.junit.Assert;
@@ -125,12 +127,20 @@ public class StreamTest {
         UserStream stream =
             (UserStream) DailyMileUtil.getGson().fromJson(SAMPLE_STREAM, UserStream.class);
         Set<Entry> entries = stream.getEntries();
-        Assert.assertEquals(4L, entries.size());
+        assertEquals(4L, entries.size());
+        
+        Entry first = (Entry) entries.toArray()[0];
+        
         User u = new User();
         u.setName("Ben W.");
         u.setUrl("http//www.dailymile.com/people/ben");
         u.setImageUrl("http://media.dailymile.com/pictures/2.jpg");
-        Assert.assertEquals(u, ((Entry[]) entries.toArray(new Entry[entries.size()]))[0].getUser());
+        assertEquals(u, first.getUser());
+        
+        assertEquals(1, first.getComments().size());
+        
+        Comment firstComment = (Comment) first.getComments().toArray()[0]; 
+        assertEquals(u, firstComment.getUser());        
     }
 
     @Test
