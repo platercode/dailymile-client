@@ -13,50 +13,48 @@ import com.pc.dailymile.utils.Units;
  */
 public class Distance {
 
-	private Units units;
-	private String value;
-	
-	public Distance() {}
+    private Units units;
+    private String value;
 
-	public Units getUnits() {
-		return units;
-	}
+    public Distance() {
+    }
 
-	public void setUnits(Units units) {
-		this.units = units;
-	}
+    public Units getUnits() {
+        return units;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public void setUnits(Units units) {
+        this.units = units;
+    }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-	
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).append("units", units).append(
-				"value", value).toString();
-	}
+    public String getValue() {
+        return value;
+    }
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(15, 35).append(units).append(value)
-				.toHashCode();
-	}
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Distance other = (Distance) obj;
-		return new EqualsBuilder().append(units, other.units).append(
-				value, other.value).isEquals();
-	}
-	
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("units", units).append("value", value).toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(15, 35).append(units).append(value).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Distance other = (Distance) obj;
+        return new EqualsBuilder().append(units, other.units).append(value, other.value).isEquals();
+    }
+
 }

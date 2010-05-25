@@ -8,7 +8,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.gson.annotations.SerializedName;
 
-
 /*
  * {
  * "permalink":"http://www.dailymile.com/entries/978880",
@@ -36,97 +35,95 @@ import com.google.gson.annotations.SerializedName;
  * }
  */
 
-public class Entry implements Comparable<Entry>{
+public class Entry implements Comparable<Entry> {
 
-	private Long id;
-	private Workout workout;
-	private String message;
-	private User user;
-	@SerializedName("created_at")
-	private Date date;
-	
-	public Entry() {
-		
-	}
+    private Long id;
+    private Workout workout;
+    private String message;
+    private User user;
+    @SerializedName("created_at")
+    private Date date;
 
-	public Long getId() {
-		return id;
-	}
+    public Entry() {
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    }
 
-	public Workout getWorkout() {
-		return workout;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setWorkout(Workout workout) {
-		this.workout = workout;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public Workout getWorkout() {
+        return workout;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	
-	public User getUser() {
-		return user;
-	}
-	
-	public void setUser(User user){
-		this.user = user;
-	}
-	
-	public Date getDate() {
-		return date;
-	}
-	
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this).append("id", id).append("message",
-				message).append("user", user).append("workout", workout)
-				.append("date", date).toString();
-	}
+    public void setWorkout(Workout workout) {
+        this.workout = workout;
+    }
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(11, 31).append(id).append(message).append(
-				user).append(workout).append(date).toHashCode();
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Entry other = (Entry) obj;
-		return new EqualsBuilder().append(id, other.id).append(message,
-				other.message).append(user, other.user).append(workout,
-				other.workout).append(date, other.date).isEquals();
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public int compareTo(Entry o) {
-		int ret = o.getDate().compareTo(getDate());
-		if (ret == 0) {
-			if (this.equals(o)) {
-				//they are truly equal
-				return ret;
-			}
-			//use the id as the tie breaker
-			ret = o.getId().compareTo(getId());
-		}
-		return ret;
-	}
-	
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this).append("id", id).append("message", message).append("user",
+                user).append("workout", workout).append("date", date).toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(11, 31).append(id).append(message).append(user).append(workout)
+                .append(date).toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Entry other = (Entry) obj;
+        return new EqualsBuilder().append(id, other.id).append(message, other.message).append(user,
+                other.user).append(workout, other.workout).append(date, other.date).isEquals();
+    }
+
+    public int compareTo(Entry o) {
+        int dateVal = o.getDate().compareTo(getDate());
+        if (dateVal == 0) {
+            if (this.equals(o)) {
+                // they are truly equal
+                return dateVal;
+            }
+            // use the id as the tie breaker
+            return o.getId().compareTo(getId());
+        }
+        return dateVal;
+    }
+
 }
