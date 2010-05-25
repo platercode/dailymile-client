@@ -20,7 +20,7 @@ public class WorkoutTest {
             "{\"felt\":\"good\",\"type\":\"running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
                 +
                 // TODO - verify this change
-                // "\"completed_at\":\"2010-01-01T00:00:01.-0500\"}";
+                // "\"completed_at\":\"2010-01-01T00:00:01-05:00\"}";
                 "\"completed_at\":\"2010-01-01 00:00:01\"}";
         Workout wo = new Workout();
         wo.setDistanceUnits(Units.miles);
@@ -43,7 +43,7 @@ public class WorkoutTest {
     public void testJsonToWorkout() throws Exception {
         String json =
             "{\"felt\":\"good\",\"type\":\"running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
-                + "\"completed_at\":\"2010-01-01T00:00:01.-0500\"}";
+                + "\"completed_at\":\"2010-01-01T00:00:01-05:00\"}";
 
         Workout wo = DailyMileUtil.getGson().fromJson(json, Workout.class);
 
@@ -67,7 +67,7 @@ public class WorkoutTest {
     public void testJsonToWorkoutWhenTypeIsUnrecognized() throws Exception {
         String json =
             "{\"felt\":\"good\",\"type\":\"ccskiing\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
-                + "\"completed_at\":\"2010-01-01T00:00:01.-0500\"}";
+                + "\"completed_at\":\"2010-01-01T00:00:01-05:00\"}";
 
         Workout wo = DailyMileUtil.getGson().fromJson(json, Workout.class);
 
