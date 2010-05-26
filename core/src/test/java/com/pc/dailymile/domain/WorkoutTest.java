@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Calendar;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import com.google.gson.Gson;
@@ -13,6 +15,8 @@ import com.pc.dailymile.utils.Type;
 import com.pc.dailymile.utils.Units;
 
 public class WorkoutTest {
+    
+    private static final Gson GSON = DailyMileUtil.getGson();
 
     @Test
     public void testWorkoutToJson() throws Exception {
@@ -34,8 +38,8 @@ public class WorkoutTest {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 1);
         wo.setCompletedDate(cal.getTime());
-        Gson gson = DailyMileUtil.getGson();
-        String actual = gson.toJson(wo, Workout.class);
+        
+        String actual = GSON.toJson(wo, Workout.class);
         assertEquals(expected, actual);
     }
 
@@ -45,7 +49,7 @@ public class WorkoutTest {
             "{\"felt\":\"good\",\"type\":\"running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
                 + "\"completed_at\":\"2010-01-01T00:00:01-05:00\"}";
 
-        Workout wo = DailyMileUtil.getGson().fromJson(json, Workout.class);
+        Workout wo = GSON.fromJson(json, Workout.class);
 
         assertEquals(Units.miles, wo.getDistanceUnits());
         assertEquals("2", wo.getDistanceValue());
@@ -69,11 +73,28 @@ public class WorkoutTest {
             "{\"felt\":\"good\",\"type\":\"ccskiing\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
                 + "\"completed_at\":\"2010-01-01T00:00:01-05:00\"}";
 
-        Workout wo = DailyMileUtil.getGson().fromJson(json, Workout.class);
+        Workout wo = GSON.fromJson(json, Workout.class);
 
         assertEquals(Units.miles, wo.getDistanceUnits());
         assertEquals("2", wo.getDistanceValue());
         assertEquals(Feeling.good, wo.getFelt());
         assertEquals(Type.unknown, wo.getType());
+    }
+    
+    @Test
+    public void testJsonToWorkoutWhenFeltIsMissing() throws Exception {
+        String json = 
+                "{\r\n" + 
+        		"  \"type\": \"cycling\",\r\n" + 
+        		"  \"duration\": 7800,\r\n" + 
+        		"  \"distance\": {\r\n" + 
+        		"    \"units\": \"miles\",\r\n" + 
+        		"    \"value\": 39.2\r\n" + 
+        		"   }\r\n" + 
+        		"}";
+        
+        Workout w = GSON.fromJson(json, Workout.class);
+        
+        Assert.assertNull(w.getFelt());
     }
 }
