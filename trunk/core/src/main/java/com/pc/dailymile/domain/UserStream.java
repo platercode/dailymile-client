@@ -16,6 +16,7 @@
 */
 package com.pc.dailymile.domain;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -53,6 +54,9 @@ public class UserStream {
     private Set<Entry> entries;
 
     public Set<Entry> getEntries() {
+        if (entries == null) {
+            return Collections.emptySet();
+        }
         return new TreeSet<Entry>(entries);
     }
 
