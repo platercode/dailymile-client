@@ -17,6 +17,7 @@
 package com.pc.dailymile.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -39,5 +40,11 @@ public class EntryTest {
         entry.setComments(new TreeSet<Comment>(Arrays.asList(comment_1, comment_2)));
         
         assertEquals(comment_2, entry.getComments().toArray()[0]);
+    }
+    
+    @Test
+    public void ensureThatGetCommentsAlwaysReturnsNonNull() {
+        Entry entry = new Entry();
+        assertNotNull(entry.getComments());
     }
 }

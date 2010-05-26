@@ -16,6 +16,7 @@
 */
 package com.pc.dailymile.domain;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
@@ -108,6 +109,9 @@ public class Entry implements Comparable<Entry> {
     }
     
     public Set<Comment> getComments() {
+        if (comments == null) {
+            return Collections.emptySet();
+        }
         return new TreeSet<Comment>(comments);
     }
 

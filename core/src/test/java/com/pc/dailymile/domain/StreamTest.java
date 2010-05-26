@@ -1,6 +1,7 @@
 package com.pc.dailymile.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Set;
 
@@ -151,6 +152,11 @@ public class StreamTest {
 		Assert.assertEquals(4L, entries.size());
         Entry first = (Entry) entries.toArray()[0];
         Assert.assertEquals(Long.valueOf("232323233"), first.getId());
+    }
+    
+    @Test
+    public void ensureThatGetEntriesAlwaysReturnsNonNull() {
+        assertNotNull(new UserStream().getEntries());
     }
 
 }
