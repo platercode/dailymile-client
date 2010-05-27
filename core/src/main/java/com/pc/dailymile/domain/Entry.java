@@ -122,13 +122,14 @@ public class Entry implements Comparable<Entry> {
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id).append("message", message).append("user",
-                user).append("workout", workout).append("date", date).toString();
+                user).append("workout", workout).append("date", date).append("comments",
+                getComments()).toString();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(11, 31).append(id).append(message).append(user).append(workout)
-                .append(date).toHashCode();
+                .append(date).append(comments).toHashCode();
     }
 
     @Override
@@ -141,7 +142,8 @@ public class Entry implements Comparable<Entry> {
             return false;
         Entry other = (Entry) obj;
         return new EqualsBuilder().append(id, other.id).append(message, other.message).append(user,
-                other.user).append(workout, other.workout).append(date, other.date).isEquals();
+                other.user).append(workout, other.workout).append(date, other.date).append(
+                comments, other.comments).isEquals();
     }
 
     public int compareTo(Entry o) {

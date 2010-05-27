@@ -17,10 +17,12 @@
 package com.pc.dailymile.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.TreeSet;
 
 import org.junit.Test;
@@ -46,5 +48,17 @@ public class EntryTest {
     public void ensureThatGetCommentsAlwaysReturnsNonNull() {
         Entry entry = new Entry();
         assertNotNull(entry.getComments());
+    }
+    
+    @Test
+    public void testEquals() {
+        Entry entry = new Entry();
+        Entry entry_2 = new Entry();
+        assertEquals(entry, entry_2);
+        
+        HashSet<Comment> comments = new HashSet<Comment>();
+        comments.add(new Comment());
+        entry_2.setComments(comments);
+        assertFalse(entry.equals(entry_2));
     }
 }
