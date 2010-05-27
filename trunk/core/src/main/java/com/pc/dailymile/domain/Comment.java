@@ -16,6 +16,7 @@
 */
 package com.pc.dailymile.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -24,7 +25,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Comment implements Comparable<Comment> {
+public class Comment implements Comparable<Comment>, Serializable {
 
     private User user;
     @SerializedName("created_at")

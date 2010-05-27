@@ -16,13 +16,15 @@
 */
 package com.pc.dailymile.domain;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class User implements Serializable {
 
     @SerializedName("display_name")
     private String name;
