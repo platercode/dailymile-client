@@ -16,6 +16,7 @@
 */
 package com.pc.dailymile.domain;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
@@ -50,7 +51,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * "likes":[]}
  * ]}
  */
-public class UserStream {
+public class UserStream implements Serializable {
     private Set<Entry> entries;
 
     public Set<Entry> getEntries() {

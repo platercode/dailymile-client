@@ -16,6 +16,8 @@
 */
 package com.pc.dailymile.domain;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -27,7 +29,7 @@ import com.pc.dailymile.utils.Units;
  *            "value":3.1}
  *           },
  */
-public class Distance {
+public class Distance implements Serializable {
 
     private Units units;
     private String value;

@@ -16,6 +16,7 @@
 */
 package com.pc.dailymile.domain;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
@@ -54,7 +55,7 @@ import com.google.gson.annotations.SerializedName;
  * }
  */
 
-public class Entry implements Comparable<Entry> {
+public class Entry implements Comparable<Entry>, Serializable {
 
     private Long id;
     private Workout workout;

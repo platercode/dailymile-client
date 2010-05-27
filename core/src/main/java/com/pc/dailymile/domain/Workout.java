@@ -16,6 +16,7 @@
 */
 package com.pc.dailymile.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -36,7 +37,7 @@ import com.pc.dailymile.utils.Units;
  *            "completed_at":"2010-01-01 00:00:01"
  *            },
  */
-public class Workout {
+public class Workout implements Serializable {
 
     private Feeling felt;
     private Type type;
