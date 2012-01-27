@@ -17,7 +17,6 @@
 package com.pc.dailymile.domain;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -30,21 +29,20 @@ import com.pc.dailymile.utils.Units;
 
 /*
  *           {"felt":"good",
- *            "type":"running",
+ *            "activity_type":"running",
  *            "duration":1645,
  *            "distance":{"units":"miles",
  *                        "value":3.1},
- *            "completed_at":"2010-01-01 00:00:01"
+ *            "title":"my title"
  *            },
  */
 public class Workout implements Serializable {
 
     private Feeling felt;
+    @SerializedName("activity_type")
     private Type type;
     private Long duration;
     private Distance distance;
-    @SerializedName("completed_at")
-    private Date completedDate;
     private String title;
 
     public Workout() {
@@ -98,15 +96,6 @@ public class Workout implements Serializable {
         return distance.getValue();
     }
 
-    public Date getCompletedDate() {
-        // 2010-12-25 12:15:00
-        return completedDate;
-    }
-
-    public void setCompletedDate(Date completedDate) {
-        this.completedDate = completedDate;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -117,14 +106,14 @@ public class Workout implements Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("completed_at", completedDate).append("distance",
+        return new ToStringBuilder(this).append("distance",
                 distance).append("duration", duration).append("felt", felt).append("type", type)
                 .append("title", title).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(7, 29).append(completedDate).append(distance).append(duration)
+        return new HashCodeBuilder(7, 29).append(distance).append(duration)
                 .append(felt).append(type).append(title).toHashCode();
     }
 
@@ -137,7 +126,7 @@ public class Workout implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Workout other = (Workout) obj;
-        return new EqualsBuilder().append(completedDate, other.completedDate).append(distance,
+        return new EqualsBuilder().append(distance,
                 other.distance).append(duration, other.duration).append(felt, other.felt).append(
                 type, other.type).append(title, other.title).isEquals();
     }

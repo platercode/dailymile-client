@@ -21,23 +21,12 @@ public class WorkoutTest {
     @Test
     public void testWorkoutToJson() throws Exception {
         String expected =
-            "{\"felt\":\"good\",\"type\":\"running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
-                +
-                // TODO - verify this change
-                // "\"completed_at\":\"2010-01-01T00:00:01-05:00\"}";
-                "\"completed_at\":\"2010-01-01 00:00:01\"}";
+            "{\"felt\":\"good\",\"activity_type\":\"Running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"}}";
         Workout wo = new Workout();
         wo.setDistanceUnits(Units.miles);
         wo.setDistanceValue("2");
         wo.setFelt(Feeling.good);
-        wo.setType(Type.running);
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_YEAR, 1);
-        cal.set(Calendar.YEAR, 2010);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 1);
-        wo.setCompletedDate(cal.getTime());
+        wo.setType(Type.Running);
         
         String actual = GSON.toJson(wo, Workout.class);
         assertEquals(expected, actual);
@@ -46,46 +35,34 @@ public class WorkoutTest {
     @Test
     public void testJsonToWorkout() throws Exception {
         String json =
-            "{\"felt\":\"good\",\"type\":\"running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
-                + "\"completed_at\":\"2010-01-01T00:00:01-05:00\"}";
+            "{\"felt\":\"good\",\"activity_type\":\"Running\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"}}";
 
         Workout wo = GSON.fromJson(json, Workout.class);
 
         assertEquals(Units.miles, wo.getDistanceUnits());
         assertEquals("2", wo.getDistanceValue());
         assertEquals(Feeling.good, wo.getFelt());
-        assertEquals(Type.running, wo.getType());
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_YEAR, 1);
-        cal.set(Calendar.YEAR, 2010);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 1);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        assertEquals(cal.getTime(), wo.getCompletedDate());
+        assertEquals(Type.Running, wo.getType());
     }
 
     @Test
     public void testJsonToWorkoutWhenTypeIsUnrecognized() throws Exception {
         String json =
-            "{\"felt\":\"good\",\"type\":\"ccskiing\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"},"
-                + "\"completed_at\":\"2010-01-01T00:00:01-05:00\"}";
+            "{\"felt\":\"good\",\"activity_type\":\"Ccskiing\",\"distance\":{\"units\":\"miles\",\"value\":\"2\"}}";
 
         Workout wo = GSON.fromJson(json, Workout.class);
 
         assertEquals(Units.miles, wo.getDistanceUnits());
         assertEquals("2", wo.getDistanceValue());
         assertEquals(Feeling.good, wo.getFelt());
-        assertEquals(Type.unknown, wo.getType());
+        assertEquals(Type.Unknown, wo.getType());
     }
     
     @Test
     public void testJsonToWorkoutWhenFeltIsMissing() throws Exception {
         String json = 
                 "{\r\n" + 
-        		"  \"type\": \"cycling\",\r\n" + 
+        		"  \"activity_type\": \"Cycling\",\r\n" + 
         		"  \"duration\": 7800,\r\n" + 
         		"  \"distance\": {\r\n" + 
         		"    \"units\": \"miles\",\r\n" + 

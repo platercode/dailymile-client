@@ -37,7 +37,7 @@ public class DateConverter implements JsonDeserializer<Date>, JsonSerializer<Dat
     private static String SERIALIZATION_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
     // 2010-12-25T12:15:00-05:00
-    private static String DESERIALIZATION_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+    private static String DESERIALIZATION_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     
     private DateTimeFormatter deserializeFormatter = DateTimeFormat.forPattern(
             DESERIALIZATION_FORMAT);

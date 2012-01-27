@@ -23,16 +23,16 @@ package com.pc.dailymile.utils;
  * 
  */
 public enum Type {
-    running,
-    cycling,
-    swimming,
-    walking,
-    fitness,
-    weights,
-    crossfit,
-    elliptical,
-    hiking,
-    yoga,
-    rowing,
-    unknown;
+    Running,
+    Cycling,
+    Swimming,
+    Walking,
+    Fitness,
+    Weights,
+    Crossfit,
+    Elliptical,
+    Hiking,
+    Yoga,
+    Rowing,
+    Unknown;
 }

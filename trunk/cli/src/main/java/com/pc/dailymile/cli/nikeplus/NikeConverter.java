@@ -61,12 +61,12 @@ public class NikeConverter extends Converter {
 	protected Workout createWorkout(Node run) {
 		Workout wo = new Workout();
 		//only support running
-		wo.setType(Type.running);
+		wo.setType(Type.Running);
 		wo.setDuration(parseDuration(run));
 		//nike plus keeps dist in kilometers
 		wo.setDistanceUnits(Units.kilometers);
 		wo.setDistanceValue(parseDistance(run));
-		wo.setCompletedDate(parseCompletionDate(run));
+		//wo.setCompletedDate(parseCompletionDate(run));
 
 		return wo;
 	}

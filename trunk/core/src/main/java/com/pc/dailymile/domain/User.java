@@ -26,11 +26,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class User implements Serializable {
 
+    private String username;
     @SerializedName("display_name")
     private String name;
-
     private String url;
-
     @SerializedName("photo_url")
     private String imageUrl;
 
@@ -58,15 +57,24 @@ public class User implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("imageUrl", imageUrl).append("name", name).append(
-                "url", url).toString();
+                "url", url).append("username", username).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(imageUrl).append(name).append(url).toHashCode();
+        return new HashCodeBuilder(17, 37).append(imageUrl).append(name).append(url).append(
+                username).toHashCode();
     }
 
     @Override
@@ -79,6 +87,6 @@ public class User implements Serializable {
             return false;
         User other = (User) obj;
         return new EqualsBuilder().append(imageUrl, other.imageUrl).append(name, other.name)
-                .append(url, other.url).isEquals();
+                .append(url, other.url).append(username, other.username).isEquals();
     }
 }
