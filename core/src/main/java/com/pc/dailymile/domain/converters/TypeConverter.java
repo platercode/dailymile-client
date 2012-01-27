@@ -31,7 +31,7 @@ public class TypeConverter implements JsonDeserializer<Type> {
         try {
             ret = Enum.valueOf((Class<Type>) typeOfT, json.getAsString());
         } catch (IllegalArgumentException e) {
-            ret = Type.unknown;
+            ret = Type.Unknown;
         }
         return ret;
     }

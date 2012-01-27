@@ -228,7 +228,7 @@ public class DailyMileClient {
         httpClient = defaultHttpClient;
     }
 
-    private Entry getEntry(Long id) {
+    public Entry getEntry(Long id) {
         return DailyMileUtil.getGson().fromJson(getResource(DailyMileUtil.buildEntryUrl(id)),
                 Entry.class);
     }

@@ -30,15 +30,16 @@ import com.google.gson.annotations.SerializedName;
 
 /*
  * {
- * "permalink":"http://www.dailymile.com/entries/978880",
+ * "url":"http://www.dailymile.com/entries/978880",
  * "message":"",
- * "created_at":"2010-02-14T15:55:52-06:00",
+ * "at":"2010-02-14T15:55:52-06:00",
  * "user":{"url":"http://www.dailymile.com/people/jplater",
  *         "display_name":"Jeff",
- *         "photo_url":"http://www.dailymile.com/images/defaults/user_avatar.jpg"
+ *         "photo_url":"http://www.dailymile.com/images/defaults/user_avatar.jpg",
+ *         "username":"jplaterTest"
  *         },
  * "workout":{"felt":"good",
- *            "type":"running",
+ *            "activity_type":"running",
  *            "duration":1645,
  *            "distance":{"units":"miles",
  *                        "value":3.1}
@@ -61,7 +62,7 @@ public class Entry implements Comparable<Entry>, Serializable {
     private Workout workout;
     private String message;
     private User user;
-    @SerializedName("created_at")
+    @SerializedName("at")
     private Date date;
     private Set<Comment> comments;
 
