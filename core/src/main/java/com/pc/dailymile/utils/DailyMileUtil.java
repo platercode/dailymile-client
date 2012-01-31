@@ -40,6 +40,9 @@ public class DailyMileUtil {
     private static final String USER_STREAM_URL =
         "http://api.dailymile.com/people/{0}/entries.json";
     private static final String ENTRY_URL = "http://api.dailymile.com/entries/{0}.json";
+    
+    private static final String USER_STREAM_PAGED_URL =
+        "http://api.dailymile.com/people/{0}/entries.json?page={1}";
 
     // date format: 2010-03-29T21:25:09-04:00
     private static final GsonBuilder GSON_BUILDER =
@@ -52,6 +55,19 @@ public class DailyMileUtil {
 
     public static String buildUserStreamUrl(String username) {
         return MessageFormat.format(USER_STREAM_URL, username);
+    }
+    
+    public static String buildUserStreamUrl(String username, int pageNumber, EntryCriteria query) {
+        StringBuilder rtn = new StringBuilder();
+        rtn.append(MessageFormat.format(USER_STREAM_PAGED_URL, username, pageNumber));
+        if (query != null) {
+            String queryString = query.buildQueryString();
+            if (queryString != null && queryString.length() > 0) {
+                rtn.append("&").append(queryString);
+            }
+        }
+        
+        return rtn.toString();
     }
 
     public static String buildEntryUrl(Long id) {

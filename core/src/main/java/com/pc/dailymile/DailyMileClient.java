@@ -52,14 +52,15 @@ import org.apache.http.util.EntityUtils;
 
 import com.pc.dailymile.domain.Entry;
 import com.pc.dailymile.domain.UserStream;
+import com.pc.dailymile.domain.UserStreamIterator;
 import com.pc.dailymile.domain.Workout;
 import com.pc.dailymile.utils.DailyMileUtil;
+import com.pc.dailymile.utils.EntryCriteria;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.HttpRequestAdapter;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
-
 
 public class DailyMileClient {
 
@@ -95,7 +96,7 @@ public class DailyMileClient {
     }
 
     /**
-     * Retrieve a users stream. A users stream contains the 20 most recent
+     * Retrieve a user's stream. A users stream contains the 20 most recent
      * entries
      * 
      * @param username
@@ -106,6 +107,33 @@ public class DailyMileClient {
     public UserStream getUserStream(String username) {
         return DailyMileUtil.getGson().fromJson(
                 getResource(DailyMileUtil.buildUserStreamUrl(username)), UserStream.class);
+    }
+    
+    /**
+     * Retrieve a specific page of a user's stream 
+     * 
+     * @param username
+     *             the user who's stream you want to pull down
+     * @param page
+     *             
+     * @param criteria
+     * @return
+     */
+    public UserStream getUserStream(String username, int page, EntryCriteria criteria) {
+        return DailyMileUtil.getGson().fromJson(
+                getResource(DailyMileUtil.buildUserStreamUrl(username, page, criteria)),
+                UserStream.class);
+    }
+    
+    /**
+     * Retrieve all of a user's entries
+     * 
+     * @param username
+     * @param criteria
+     * @return
+     */
+    public UserStreamIterator getAllUserEntries(String username, EntryCriteria criteria) {
+        return new UserStreamIterator(this, username, criteria);
     }
 
     /**
