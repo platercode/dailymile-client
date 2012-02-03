@@ -7,12 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-
 import com.pc.dailymile.DailyMileClient;
 import com.pc.dailymile.auth.DailyMileAuthenticator;
-import com.pc.dailymile.auth.RequestToken;
 import com.pc.dailymile.cli.nikeplus.NikeConverter;
 
 public class DailyMileCli {
@@ -63,33 +59,19 @@ public class DailyMileCli {
 				}
 			}
 		}
-		
-		OAuthConsumer consumer = new CommonsHttpOAuthConsumer(props.getProperty("consumerKey"),
-				 props.getProperty("consumerSecret"));
-						
-		consumer.setTokenWithSecret(props.getProperty("userKey"), props.getProperty("userSecret"));
-		
-		
-		
-		return new DailyMileClient(consumer);
+				
+		return new DailyMileClient(props.getProperty("oauthToken"));
 	}
 	
 	private static DailyMileClient configureDMCFromPrompts() throws Exception {
-		String consumerKey = getUserInput("Please enter your consumer key:");
-		String consumerSecret = getUserInput("Please enter your consumer secret:");
+		String clientId = getUserInput("Please enter your client id:");
 		String redirect = getUserInput("Please enter your redirect url:");
 		
-		RequestToken token = DailyMileAuthenticator.obtainRequestToken(consumerKey,
-				consumerSecret, redirect);
-
-		System.out.println("Please open a brower and go to:" + token.getAuthorizeUrl());
+		System.out.println("Please open a brower and go to:" + DailyMileAuthenticator.buildAuthorizeUrl(clientId, redirect));
 		
-		String verificationToken = getUserInput("Please enter your verification token:");
+		String oauthToken = getUserInput("Please enter your oauth token:");
 		
-		token.getProvider().retrieveAccessToken(token.getConsumer(),
-				verificationToken);
-		
-		return new DailyMileClient(token.getConsumer());
+		return new DailyMileClient(oauthToken);
 	}
 	
 	private static String getUserInput(String message) {

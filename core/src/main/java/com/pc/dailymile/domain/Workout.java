@@ -71,6 +71,7 @@ public class Workout implements Serializable {
     public Long getDuration() {
         return duration;
     }
+    
 
     /**
      * @param duration

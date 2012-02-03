@@ -2,11 +2,10 @@ package com.pc.dailymile;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 
 import com.pc.dailymile.domain.Comment;
@@ -59,13 +58,11 @@ public class DailyMileClientLiveTest {
         */
         DailyMileClient client = new DailyMileClient(null);
         Entry e = client.getEntry(1321909L);
-        Calendar c = Calendar.getInstance();
-        //2010-03-29T04:00:00Z
-        c.set(2010, 29, 2, 4, 0, 0);
         Entry expected = new Entry();
         expected.setId(1321909L);
-        //TODO: set the date in a better way
-        expected.setDate(new Date(1269849600000L));
+
+        expected.setDate(ISODateTimeFormat.dateTimeNoMillis().parseDateTime("2010-03-29T04:00:00Z")
+                .toDate());
         expected.setMessage("Testing new signpost lib");
         
         User user = new User();
@@ -78,7 +75,8 @@ public class DailyMileClientLiveTest {
         
         Comment comment = new Comment();
         comment.setMessage("good work!");
-        comment.setDate(new Date(1327655105000L));
+        comment.setDate(ISODateTimeFormat.dateTimeNoMillis().parseDateTime("2012-01-27T04:05:05Z")
+                .toDate());
         comment.setUser(user);
         
         Set<Comment> comments = new HashSet<Comment>();

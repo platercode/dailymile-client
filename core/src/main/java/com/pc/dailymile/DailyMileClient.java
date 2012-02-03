@@ -18,6 +18,7 @@ package com.pc.dailymile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +39,7 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -51,50 +53,61 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import com.pc.dailymile.domain.Entry;
+import com.pc.dailymile.domain.User;
 import com.pc.dailymile.domain.UserStream;
 import com.pc.dailymile.domain.UserStreamIterator;
 import com.pc.dailymile.domain.Workout;
 import com.pc.dailymile.utils.DailyMileUtil;
 import com.pc.dailymile.utils.EntryCriteria;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.commonshttp.HttpRequestAdapter;
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
 
 public class DailyMileClient {
 
-    private OAuthConsumer oauthConsumer;
+    private String oauthToken;
     private HttpClient httpClient;
 
     /**
      * Create a new DailyMileClient object that will use the provided
-     * OAuthConsumer to sign requests
+     * OAuthToken to authorize requests
      * 
-     * @param oauthConsumer
-     *            a valid OAuthConsumer that can be used to sign requests
+     * @param oauthToken
+     *            a valid OAuthToken that can be passed along with the request
      */
-    public DailyMileClient(OAuthConsumer oauthConsumer) {
-        this.oauthConsumer = oauthConsumer;
+    public DailyMileClient(String oauthToken) {
+        this.oauthToken = oauthToken;
         initHttpClient();
     }
 
     /**
      * Create a new DailyMileClient object that will use the provided
-     * OAuthConsumer to sign requests and the provided HttpClient.
+     * OAuthToken to authorize requests and the provided HttpClient.
      * 
      * Note: Daily Mile might not work with all useragents
      * 
-     * @param oauthConsumer
-     *            a valid OAuthConsumer that can be used to sign requests
+     * @param oauthToken
+     *            a valid OAuthToken that can be passed along with the request
      * @param httpClient
      *            the httpClient to use when making requests
      */
-    public DailyMileClient(OAuthConsumer oauthConsumer, HttpClient httpClient) {
-        this.oauthConsumer = oauthConsumer;
+    public DailyMileClient(String oauthToken, HttpClient httpClient) {
+        this.oauthToken = oauthToken;
         this.httpClient = httpClient;
     }
 
+    /**
+     * Retrieve the current user's information
+     * 
+     * @return information on the logged in user
+     */
+    public User getUser() {
+        try {
+            return DailyMileUtil.getGson().fromJson(
+                    getSecuredResource(DailyMileUtil.USER_URL), User.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to fetch user", e);
+        }
+    }
+    
     /**
      * Retrieve a user's stream. A users stream contains the 20 most recent
      * entries
@@ -126,13 +139,17 @@ public class DailyMileClient {
     }
     
     /**
-     * Retrieve all of a user's entries
+     * Retrieve all user entries that match the provided criteria.  The entries
+     * are returned in an Iterator which is lazily loaded.
      * 
-     * @param username
+     * @param username 
+     *              the user who's entries you want to pull down
      * @param criteria
+     *              any filtering you want to do, pass null to get all entries
      * @return
+     *              an Iterator of entries which is lazily loaded
      */
-    public UserStreamIterator getAllUserEntries(String username, EntryCriteria criteria) {
+    public Iterator<Entry> getUserEntries(String username, EntryCriteria criteria) {
         return new UserStreamIterator(this, username, criteria);
     }
 
@@ -211,51 +228,13 @@ public class DailyMileClient {
         }
     }
 
-    private void initHttpClient() {
-        HttpParams parameters = new BasicHttpParams();
-        HttpProtocolParams.setVersion(parameters, HttpVersion.HTTP_1_1);
-        HttpProtocolParams.setContentCharset(parameters, HTTP.DEFAULT_CONTENT_CHARSET);
-        // set the User-Agent to a common User-Agent because currently
-        // the default httpclient User-Agent doesn't work with dailymile
-        HttpProtocolParams.setUserAgent(parameters,
-                "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)");
-        HttpProtocolParams.setUseExpectContinue(parameters, false);
-        HttpConnectionParams.setTcpNoDelay(parameters, true);
-
-        SchemeRegistry schReg = new SchemeRegistry();
-        schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        ClientConnectionManager tsccm = new ThreadSafeClientConnManager(parameters, schReg);
-        
-        DefaultHttpClient defaultHttpClient = new DefaultHttpClient(tsccm, parameters);
-        defaultHttpClient.addRequestInterceptor(new HttpRequestInterceptor() {
-            public void process(final HttpRequest request, final HttpContext context)
-                throws HttpException, IOException {
-                if (!request.containsHeader("Accept-Encoding")) {
-                    request.addHeader("Accept-Encoding", "gzip");
-                }
-            }
-        });
-
-        defaultHttpClient.addResponseInterceptor(new HttpResponseInterceptor() {
-            public void process(final HttpResponse response, final HttpContext context)
-                throws HttpException, IOException {
-                HttpEntity entity = response.getEntity();
-                Header ceheader = entity.getContentEncoding();
-                if (ceheader != null) {
-                    HeaderElement[] codecs = ceheader.getElements();
-                    for (int i = 0; i < codecs.length; i++) {
-                        if (codecs[i].getName().equalsIgnoreCase("gzip")) {
-                            response.setEntity(
-                                new GzipDecompressingEntity(response.getEntity()));
-                            return;
-                        }
-                    }
-                }
-            }
-        });
-        httpClient = defaultHttpClient;
-    }
-
+    /**
+     * Gets an entry by id
+     * 
+     * @param id
+     *            id of the entry you want
+     * @return the entry
+     */
     public Entry getEntry(Long id) {
         return DailyMileUtil.getGson().fromJson(getResource(DailyMileUtil.buildEntryUrl(id)),
                 Entry.class);
@@ -276,12 +255,9 @@ public class DailyMileClient {
         doAuthenticatedPost(DailyMileUtil.ENTRIES_URL, json);
     }
 
+    
     private void doAuthenticatedPost(String url, String body) throws Exception {
-
-        if (oauthConsumer.getConsumerKey() == null || oauthConsumer.getConsumerSecret() == null) {
-            throw new OAuthExpectationFailedException("Consumer key or secret not set");
-        }
-        HttpPost request = new HttpPost(url);
+        HttpPost request = new HttpPost(url + "?oauth_token=" + oauthToken);
         HttpResponse response = null;
         try {
             HttpEntity entity = new StringEntity(body);
@@ -289,7 +265,6 @@ public class DailyMileClient {
             request.setHeader("Content-Type", "application/json; charset=utf-8");
             request.setEntity(entity);
             // sign the request
-            oauthConsumer.sign(new HttpRequestAdapter(request));
             // send the request
             response = httpClient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
@@ -299,10 +274,6 @@ public class DailyMileClient {
                     + " body: "
                     + body);
             }
-        } catch (OAuthExpectationFailedException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new OAuthCommunicationException(e);
         } finally {
             if (response != null) {
                 HttpEntity entity = response.getEntity();
@@ -318,27 +289,17 @@ public class DailyMileClient {
     }
 
     private void doAuthenticatedDelete(String url) throws Exception {
-
-        if (oauthConsumer.getConsumerKey() == null || oauthConsumer.getConsumerSecret() == null) {
-            throw new OAuthExpectationFailedException("Consumer key or secret not set");
-        }
-        HttpDelete request = new HttpDelete(url);
+        HttpDelete request = new HttpDelete(url + "?oauth_token=" + oauthToken);
         HttpResponse response = null;
         try {
             // set the content type to json
             request.setHeader("Content-Type", "application/json; charset=utf-8");
-            // sign the request
-            oauthConsumer.sign(new HttpRequestAdapter(request));
             // send the request
             response = httpClient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == 401) {
                 throw new RuntimeException("unable to execute DELETE - url: " + url);
             }
-        } catch (OAuthExpectationFailedException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new OAuthCommunicationException(e);
         } finally {
             if (response != null) {
                 HttpEntity entity = response.getEntity();
@@ -374,15 +335,10 @@ public class DailyMileClient {
     }
 
     // handles the few API resources that require oauth
-    private String getSecuredResource(String url) throws OAuthExpectationFailedException {
-
-        if (oauthConsumer.getConsumerKey() == null || oauthConsumer.getConsumerSecret() == null) {
-            throw new OAuthExpectationFailedException("Consumer key or secret not set");
-        }
-        HttpGet request = new HttpGet(url);
+    private String getSecuredResource(String url) {
+        HttpGet request = new HttpGet(url + "?oauth_token=" + oauthToken);
         HttpResponse response = null;
         try {
-            oauthConsumer.sign(new HttpRequestAdapter(request));
             response = httpClient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != 200) {
@@ -394,6 +350,52 @@ public class DailyMileClient {
         } catch (Exception e) {
             throw new RuntimeException("Unable to get resource", e);
         }
+    }
+    
+    private void initHttpClient() {
+        HttpParams parameters = new BasicHttpParams();
+        HttpProtocolParams.setVersion(parameters, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(parameters, HTTP.DEFAULT_CONTENT_CHARSET);
+        // set the User-Agent to a common User-Agent because currently
+        // the default httpclient User-Agent doesn't work with dailymile
+        HttpProtocolParams.setUserAgent(parameters,
+                "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)");
+        HttpProtocolParams.setUseExpectContinue(parameters, false);
+        HttpConnectionParams.setTcpNoDelay(parameters, true);
+
+        SchemeRegistry schReg = new SchemeRegistry();
+        schReg.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+        schReg.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+        ClientConnectionManager tsccm = new ThreadSafeClientConnManager(parameters, schReg);
+        
+        DefaultHttpClient defaultHttpClient = new DefaultHttpClient(tsccm, parameters);
+        defaultHttpClient.addRequestInterceptor(new HttpRequestInterceptor() {
+            public void process(final HttpRequest request, final HttpContext context)
+                throws HttpException, IOException {
+                if (!request.containsHeader("Accept-Encoding")) {
+                    request.addHeader("Accept-Encoding", "gzip");
+                }
+            }
+        });
+
+        defaultHttpClient.addResponseInterceptor(new HttpResponseInterceptor() {
+            public void process(final HttpResponse response, final HttpContext context)
+                throws HttpException, IOException {
+                HttpEntity entity = response.getEntity();
+                Header ceheader = entity.getContentEncoding();
+                if (ceheader != null) {
+                    HeaderElement[] codecs = ceheader.getElements();
+                    for (int i = 0; i < codecs.length; i++) {
+                        if (codecs[i].getName().equalsIgnoreCase("gzip")) {
+                            response.setEntity(
+                                new GzipDecompressingEntity(response.getEntity()));
+                            return;
+                        }
+                    }
+                }
+            }
+        });
+        httpClient = defaultHttpClient;
     }
     
     static class GzipDecompressingEntity extends HttpEntityWrapper {

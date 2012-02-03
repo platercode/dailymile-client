@@ -36,7 +36,7 @@ public class Distance implements Serializable {
 
     public Distance() {
     }
-
+    
     public Units getUnits() {
         return units;
     }

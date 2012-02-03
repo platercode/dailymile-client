@@ -20,8 +20,8 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -36,14 +36,12 @@ public class DateConverter implements JsonDeserializer<Date>, JsonSerializer<Dat
     // 2010-12-25 12:15:00
     private static String SERIALIZATION_FORMAT = "yyyy-MM-dd HH:mm:ss";
     
-    // 2010-12-25T12:15:00-05:00
-    private static String DESERIALIZATION_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    
-    private DateTimeFormatter deserializeFormatter = DateTimeFormat.forPattern(
-            DESERIALIZATION_FORMAT);
+    // 2010-12-25T12:15:00Z
+    private DateTimeFormatter deserializeFormatter = ISODateTimeFormat.dateTimeNoMillis(); 
     
     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
         throws JsonParseException {
+        
         return deserializeFormatter.parseDateTime(json.getAsJsonPrimitive().getAsString()).toDate();
     }
 
