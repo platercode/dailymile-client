@@ -16,39 +16,31 @@
 */
 package com.pc.dailymile.auth;
 
-import com.pc.dailymile.utils.DailyMileUtil;
+import java.text.MessageFormat;
 
-import oauth.signpost.OAuthConsumer;
-import oauth.signpost.OAuthProvider;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 
 public class DailyMileAuthenticator {
 
+    private static final String AUTH_URL =
+        "https://api.dailymile.com/oauth/authorize?" +
+        "response_type=token&client_id={0}&redirect_uri={1}";
+    
     /**
-     * Retrieve the request token
+     * Build out the authorize url
      * 
-     * @param consumerKey
-     *            your applications consumer key
-     * @param consumerSecret
-     *            your applications consumer secret
+     * @param clientId
+     *            your applications client id
      * @param callback
      *            the callback url registered for your application
-     * @return the request token returned from dailymile
+     * @return the url where you should direct users to
      * 
      * @throws Exception
      *             thrown if the token can't be fetched
      */
-    public static RequestToken obtainRequestToken(String consumerKey, String consumerSecret,
+    public static String buildAuthorizeUrl(String clientId,
             String callback) throws Exception {
-        OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
-
-        OAuthProvider provider =
-            new CommonsHttpOAuthProvider(DailyMileUtil.REQUEST_TOKEN_ENDPOINT_URL,
-                    DailyMileUtil.ACCESS_TOKEN_ENDPOINT_URL, DailyMileUtil.AUTHORIZE_WEBSITE_URL);
-
-        String url = provider.retrieveRequestToken(consumer, callback);
-        return new RequestToken(provider, consumer, url);
+        
+        return MessageFormat.format(AUTH_URL, clientId, callback);
     }
 
 }

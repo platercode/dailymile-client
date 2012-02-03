@@ -25,24 +25,21 @@ import com.pc.dailymile.domain.converters.DateConverter;
 import com.pc.dailymile.domain.converters.TypeConverter;
 
 public class DailyMileUtil {
-    public static final String REQUEST_TOKEN_ENDPOINT_URL =
-        "http://api.dailymile.com/oauth/request_token";
-    public static final String ACCESS_TOKEN_ENDPOINT_URL =
-        "http://api.dailymile.com/oauth/access_token";
-    public static final String AUTHORIZE_WEBSITE_URL = "http://api.dailymile.com/oauth/authorize";
-
-    public static final String ENTRIES_URL = "http://api.dailymile.com/entries.json";
+    public static final String ENTRIES_URL = "https://api.dailymile.com/entries.json";
 
     public static final String USER_AND_FRIENDS_STREAM_URL =
-        "http://api.dailymile.com/entries/friends.json";
+        "https://api.dailymile.com/entries/friends.json";
+    
+    public static final String USER_URL =
+            "https://api.dailymile.com/people/me.json";
 
-    private static final String COMMENT_URL = "http://api.dailymile.com/entries/{0}/comments.json";
+    private static final String COMMENT_URL = "https://api.dailymile.com/entries/{0}/comments.json";
     private static final String USER_STREAM_URL =
-        "http://api.dailymile.com/people/{0}/entries.json";
-    private static final String ENTRY_URL = "http://api.dailymile.com/entries/{0}.json";
+        "https://api.dailymile.com/people/{0}/entries.json";
+    private static final String ENTRY_URL = "https://api.dailymile.com/entries/{0}.json";
     
     private static final String USER_STREAM_PAGED_URL =
-        "http://api.dailymile.com/people/{0}/entries.json?page={1}";
+        "https://api.dailymile.com/people/{0}/entries.json?page={1}";
 
     // date format: 2010-03-29T21:25:09-04:00
     private static final GsonBuilder GSON_BUILDER =
