@@ -55,6 +55,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.pc.dailymile.domain.Entry;
 import com.pc.dailymile.domain.User;
+import com.pc.dailymile.domain.UserAndFriendsStreamIterator;
 import com.pc.dailymile.domain.UserStream;
 import com.pc.dailymile.domain.UserStreamIterator;
 import com.pc.dailymile.domain.Workout;
@@ -165,6 +166,16 @@ public class DailyMileClient {
         } catch (Exception e) {
             throw new RuntimeException("Unable to fetch user and friends stream", e);
         }
+    }
+    
+    public UserStream getUserAndFriendsStream(int page, EntryCriteria criteria) {
+        return DailyMileUtil.getGson().fromJson(
+                getSecuredResource(DailyMileUtil.buildUserAndFriendsStreamUrl(page, criteria)),
+                UserStream.class);
+    }
+    
+    public Iterator<Entry> getUserAndFriendsEntries(EntryCriteria criteria) {
+        return new UserAndFriendsStreamIterator(this, criteria);
     }
 
     /**
@@ -349,7 +360,9 @@ public class DailyMileClient {
 
     // handles the few API resources that require oauth
     private String getSecuredResource(String url) {
-        HttpGet request = new HttpGet(url + "?oauth_token=" + oauthToken);
+        HttpGet request =
+            new HttpGet(url.contains("?") ? (url + "&oauth_token=" + oauthToken) : (url
+                + "?oauth_token=" + oauthToken));
         HttpResponse response = null;
         try {
             response = httpClient.execute(request);

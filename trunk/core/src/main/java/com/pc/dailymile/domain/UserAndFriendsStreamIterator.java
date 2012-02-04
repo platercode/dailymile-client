@@ -26,26 +26,24 @@ import com.pc.dailymile.utils.EntryCriteria;
  * @author jplater
  *
  */
-public class UserStreamIterator extends BaseStreamIterator {
+public class UserAndFriendsStreamIterator extends BaseStreamIterator {
 
-    private final String username;
     protected final DailyMileClient client;
     private final EntryCriteria query;
     private int currentPage = 1;
     
-    public UserStreamIterator(DailyMileClient client, String username) {
-        this(client, username, null);
+    public UserAndFriendsStreamIterator(DailyMileClient client) {
+        this(client, null);
     }
     
-    public UserStreamIterator(DailyMileClient client, String username, EntryCriteria query) {
-        this.username = username;
+    public UserAndFriendsStreamIterator(DailyMileClient client, EntryCriteria query) {
         this.client = client;
         this.query = query;
     }
 
     @Override
     protected Iterator<Entry> getPageOfEntries() {
-        UserStream stream = client.getUserStream(username, currentPage++, query);
+        UserStream stream = client.getUserAndFriendsStream(currentPage++, query);
         if (stream.getEntries() != null) {
             return stream.getEntries().iterator();
         }
