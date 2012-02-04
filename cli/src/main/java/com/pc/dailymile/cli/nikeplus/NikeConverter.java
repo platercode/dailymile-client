@@ -66,7 +66,7 @@ public class NikeConverter extends Converter {
 		//nike plus keeps dist in kilometers
 		wo.setDistanceUnits(Units.kilometers);
 		wo.setDistanceValue(parseDistance(run));
-		//wo.setCompletedDate(parseCompletionDate(run));
+		wo.setCompletedDate(parseCompletionDate(run));
 
 		return wo;
 	}

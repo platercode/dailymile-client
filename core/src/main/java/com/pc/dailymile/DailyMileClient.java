@@ -274,7 +274,8 @@ public class DailyMileClient {
                     String locS = loc.getValue();
                     if (!StringUtils.isBlank(locS) && locS.matches(".*/[0-9]+$")) {
                         try {
-                            return NumberUtils.createLong(locS.substring(locS.lastIndexOf("/") + 1));
+                            return NumberUtils.createLong(
+                                    locS.substring(locS.lastIndexOf("/") + 1));
                         } catch (NumberFormatException e) {
                             return null;
                         }
@@ -285,7 +286,7 @@ public class DailyMileClient {
             return null;
         } finally {
             try {
-                if(response != null) {
+                if (response != null) {
                     HttpEntity entity = response.getEntity();
                     if (entity != null) {
                         entity.consumeContent();
