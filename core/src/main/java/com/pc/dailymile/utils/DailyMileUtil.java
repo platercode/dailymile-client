@@ -30,6 +30,9 @@ public class DailyMileUtil {
     public static final String USER_AND_FRIENDS_STREAM_URL =
         "https://api.dailymile.com/entries/friends.json";
     
+    public static final String USER_AND_FRIENDS_STREAM_PAGED_URL =
+            "https://api.dailymile.com/entries/friends.json?page={0}";
+    
     public static final String USER_URL =
             "https://api.dailymile.com/people/me.json";
 
@@ -57,6 +60,19 @@ public class DailyMileUtil {
     public static String buildUserStreamUrl(String username, int pageNumber, EntryCriteria query) {
         StringBuilder rtn = new StringBuilder();
         rtn.append(MessageFormat.format(USER_STREAM_PAGED_URL, username, pageNumber));
+        if (query != null) {
+            String queryString = query.buildQueryString();
+            if (queryString != null && queryString.length() > 0) {
+                rtn.append("&").append(queryString);
+            }
+        }
+        
+        return rtn.toString();
+    }
+    
+    public static String buildUserAndFriendsStreamUrl(int pageNumber, EntryCriteria query) {
+        StringBuilder rtn = new StringBuilder();
+        rtn.append(MessageFormat.format(USER_AND_FRIENDS_STREAM_PAGED_URL, pageNumber));
         if (query != null) {
             String queryString = query.buildQueryString();
             if (queryString != null && queryString.length() > 0) {
