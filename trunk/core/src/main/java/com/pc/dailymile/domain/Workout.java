@@ -17,6 +17,7 @@
 package com.pc.dailymile.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -44,6 +45,9 @@ public class Workout implements Serializable {
     private Long duration;
     private Distance distance;
     private String title;
+    @SerializedName("completed_at")
+    private Date completedDate;
+
 
     public Workout() {
         this.distance = new Distance();
@@ -105,16 +109,30 @@ public class Workout implements Serializable {
         this.title = title;
     }
 
+    /**
+     * Completed Date is *NOT* set when we fetch entries, use 
+     * Entry.getDate() instead
+     * 
+     * @return
+     */
+    public Date getCompletedDate() {
+        return completedDate;
+    }
+
+    public void setCompletedDate(Date completedDate) {
+        this.completedDate = completedDate;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("distance",
-                distance).append("duration", duration).append("felt", felt).append("type", type)
-                .append("title", title).toString();
+        return new ToStringBuilder(this).append("completed_at", completedDate)
+                .append("distance", distance).append("duration", duration).append("felt", felt)
+                .append("type", type).append("title", title).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(7, 29).append(distance).append(duration)
+        return new HashCodeBuilder(7, 29).append(completedDate).append(distance).append(duration)
                 .append(felt).append(type).append(title).toHashCode();
     }
 
@@ -127,8 +145,10 @@ public class Workout implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Workout other = (Workout) obj;
-        return new EqualsBuilder().append(distance,
-                other.distance).append(duration, other.duration).append(felt, other.felt).append(
-                type, other.type).append(title, other.title).isEquals();
+        return new EqualsBuilder().append(completedDate, other.completedDate)
+                .append(distance, other.distance).append(duration, other.duration)
+                .append(felt, other.felt).append(type, other.type).append(title, other.title)
+                .isEquals();
     }
+
 }

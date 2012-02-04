@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
@@ -173,13 +174,14 @@ public class DailyMileClient {
      *            an authenticated consumer
      * @param workout
      * @param message
+     * @return the id of the workout that was created
      */
-    public void addWorkout(Workout workout, String message) {
+    public Long addWorkout(Workout workout, String message) {
         Entry entry = new Entry();
         entry.setMessage(StringUtils.stripToEmpty(message));
         entry.setWorkout(workout);
         try {
-            addEntry(entry);
+            return addEntry(entry);
         } catch (Exception e) {
             throw new RuntimeException("Unable to add workout", e);
         }
@@ -201,28 +203,18 @@ public class DailyMileClient {
     }
 
     /**
-     * Get a workout by id
-     * 
-     * @param id
-     *            id of the workout you want
-     * @return the workout
-     */
-    public Workout getWorkout(Long id) {
-        return getEntry(id).getWorkout();
-    }
-
-    /**
      * Adds to provided comment to the entry with the provided id
      * 
      * @param comment
      *            comment to add
      * @param id
      *            id of the entry to add the comment to
+     * @return the id of the comment that was added
      */
-    public void addComment(String comment, Long id) {
+    public Long addComment(String comment, Long id) {
         String body = "{\"body\":\"" + comment + "\"}";
         try {
-            doAuthenticatedPost(DailyMileUtil.buildCommentUrl(id), body);
+            return doAuthenticatedPost(DailyMileUtil.buildCommentUrl(id), body);
         } catch (Exception e) {
             throw new RuntimeException("Unable to add comment", e);
         }
@@ -249,14 +241,15 @@ public class DailyMileClient {
      * 
      * @throws Exception
      *             thrown if the add fails
+     * @return the id of the entry that was created
      */
-    private void addEntry(Entry entry) throws Exception {
+    private Long addEntry(Entry entry) throws Exception {
         String json = DailyMileUtil.getGson().toJson(entry);
-        doAuthenticatedPost(DailyMileUtil.ENTRIES_URL, json);
+        return doAuthenticatedPost(DailyMileUtil.ENTRIES_URL, json);
     }
 
     
-    private void doAuthenticatedPost(String url, String body) throws Exception {
+    private Long doAuthenticatedPost(String url, String body) throws Exception {
         HttpPost request = new HttpPost(url + "?oauth_token=" + oauthToken);
         HttpResponse response = null;
         try {
@@ -274,16 +267,33 @@ public class DailyMileClient {
                     + " body: "
                     + body);
             }
-        } finally {
-            if (response != null) {
-                HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    try {
-                        entity.consumeContent();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+            
+            if (statusCode == 201) {
+                Header loc = response.getFirstHeader("Location");
+                if (loc != null) {
+                    String locS = loc.getValue();
+                    if (!StringUtils.isBlank(locS) && locS.matches(".*/[0-9]+$")) {
+                        try {
+                            return NumberUtils.createLong(locS.substring(locS.lastIndexOf("/") + 1));
+                        } catch (NumberFormatException e) {
+                            return null;
+                        }
                     }
                 }
+            }
+            
+            return null;
+        } finally {
+            try {
+                if(response != null) {
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
+                        entity.consumeContent();
+                    }
+                }
+                //EntityUtils.consume(response.getEntity());
+            } catch (IOException e) {
+                // ignore
             }
         }
     }
@@ -301,17 +311,19 @@ public class DailyMileClient {
                 throw new RuntimeException("unable to execute DELETE - url: " + url);
             }
         } finally {
-            if (response != null) {
-                HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    try {
+            try {
+                if (response != null) {
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
                         entity.consumeContent();
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
                 }
+                //EntityUtils.consume(response.getEntity());
+            } catch (IOException e) {
+                // ignore
             }
         }
+
     }
 
     // no authentication
