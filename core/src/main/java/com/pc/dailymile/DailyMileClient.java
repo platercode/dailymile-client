@@ -96,6 +96,15 @@ public class DailyMileClient {
         this.httpClient = httpClient;
     }
 
+    public User getUser(String username) {
+        try {
+            return DailyMileUtil.getGson().fromJson(
+                    getResource(DailyMileUtil.buildUserUrl(username)), User.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to fetch user", e);
+        }
+    }
+    
     /**
      * Retrieve the current user's information
      * 
@@ -104,7 +113,7 @@ public class DailyMileClient {
     public User getUser() {
         try {
             return DailyMileUtil.getGson().fromJson(
-                    getSecuredResource(DailyMileUtil.USER_URL), User.class);
+                    getSecuredResource(DailyMileUtil.buildUserUrl("me")), User.class);
         } catch (Exception e) {
             throw new RuntimeException("Unable to fetch user", e);
         }

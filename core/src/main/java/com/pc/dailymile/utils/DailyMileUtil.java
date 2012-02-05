@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*/
+ */
 package com.pc.dailymile.utils;
 
 import java.text.MessageFormat;
@@ -29,34 +29,38 @@ public class DailyMileUtil {
 
     public static final String USER_AND_FRIENDS_STREAM_URL =
         "https://api.dailymile.com/entries/friends.json";
-    
-    public static final String USER_AND_FRIENDS_STREAM_PAGED_URL =
-            "https://api.dailymile.com/entries/friends.json?page={0}";
-    
-    public static final String USER_URL =
-            "https://api.dailymile.com/people/me.json";
+
+    private static final String USER_AND_FRIENDS_STREAM_PAGED_URL =
+        "https://api.dailymile.com/entries/friends.json?page={0}";
+
+    private static final String USER_URL = "https://api.dailymile.com/people/{0}.json";
 
     private static final String COMMENT_URL = "https://api.dailymile.com/entries/{0}/comments.json";
     private static final String USER_STREAM_URL =
         "https://api.dailymile.com/people/{0}/entries.json";
     private static final String ENTRY_URL = "https://api.dailymile.com/entries/{0}.json";
-    
+
     private static final String USER_STREAM_PAGED_URL =
         "https://api.dailymile.com/people/{0}/entries.json?page={1}";
 
     // date format: 2010-03-29T21:25:09-04:00
-    private static final GsonBuilder GSON_BUILDER =
-        new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.Z").registerTypeAdapter(Type.class,
-                new TypeConverter()).registerTypeAdapter(Date.class, new DateConverter());
+    private static final GsonBuilder GSON_BUILDER = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.Z")
+            .registerTypeAdapter(Type.class, new TypeConverter())
+            .registerTypeAdapter(Date.class, new DateConverter());
 
     public static Gson getGson() {
         return GSON_BUILDER.create();
     }
 
+    public static String buildUserUrl(String username) {
+        return MessageFormat.format(USER_URL, username);
+    }
+
     public static String buildUserStreamUrl(String username) {
         return MessageFormat.format(USER_STREAM_URL, username);
     }
-    
+
     public static String buildUserStreamUrl(String username, int pageNumber, EntryCriteria query) {
         StringBuilder rtn = new StringBuilder();
         rtn.append(MessageFormat.format(USER_STREAM_PAGED_URL, username, pageNumber));
@@ -66,10 +70,10 @@ public class DailyMileUtil {
                 rtn.append("&").append(queryString);
             }
         }
-        
+
         return rtn.toString();
     }
-    
+
     public static String buildUserAndFriendsStreamUrl(int pageNumber, EntryCriteria query) {
         StringBuilder rtn = new StringBuilder();
         rtn.append(MessageFormat.format(USER_AND_FRIENDS_STREAM_PAGED_URL, pageNumber));
@@ -79,7 +83,7 @@ public class DailyMileUtil {
                 rtn.append("&").append(queryString);
             }
         }
-        
+
         return rtn.toString();
     }
 
