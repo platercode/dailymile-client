@@ -32,6 +32,8 @@ public class User implements Serializable {
     private String url;
     @SerializedName("photo_url")
     private String imageUrl;
+    private String location;
+    private String goal;
 
     public String getName() {
         return name;
@@ -65,16 +67,33 @@ public class User implements Serializable {
         this.username = username;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getGoal() {
+        return goal;
+    }
+
+    public void setGoal(String goal) {
+        this.goal = goal;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("imageUrl", imageUrl).append("name", name).append(
-                "url", url).append("username", username).toString();
+        return new ToStringBuilder(this).append("imageUrl", imageUrl).append("name", name)
+                .append("url", url).append("username", username).append("location", location)
+                .append("goal", goal).toString();
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(imageUrl).append(name).append(url).append(
-                username).toHashCode();
+        return new HashCodeBuilder(17, 37).append(imageUrl).append(name).append(url)
+                .append(username).append(location).append(goal).toHashCode();
     }
 
     @Override
@@ -87,6 +106,7 @@ public class User implements Serializable {
             return false;
         User other = (User) obj;
         return new EqualsBuilder().append(imageUrl, other.imageUrl).append(name, other.name)
-                .append(url, other.url).append(username, other.username).isEquals();
+                .append(url, other.url).append(username, other.username)
+                .append(location, other.location).append(goal, other.goal).isEquals();
     }
 }
