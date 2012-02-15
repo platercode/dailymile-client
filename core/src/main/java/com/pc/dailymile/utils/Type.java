@@ -23,16 +23,43 @@ package com.pc.dailymile.utils;
  * 
  */
 public enum Type {
-    Running,
-    Cycling,
-    Swimming,
-    Walking,
-    Fitness,
-    Weights,
-    Crossfit,
-    Elliptical,
-    Hiking,
-    Yoga,
-    Rowing,
-    Unknown;
+    CCSkiing("Cc Skiing"),
+    Commute("Commute"),
+    CoreFitness("Core Fitness"),
+    Crossfit("Crossfit"),
+    CrossTraining("Cross Training"),
+    Cycling("Cycling"),
+    Elliptical("Elliptical"),
+    Fitness("Fitness"),
+    Hiking("Hiking"),
+    InlineSkating("Inline Skating"),
+    RockClimbing("Rock Climbing"),
+    Rowing("Rowing"),
+    Running("Running"),
+    Spinning("Spinning"),
+    Swimming("Swimming"),
+    Unknown("Unknown"),
+    Walking("Walking"),
+    Weights("Weights"),
+    Yoga("Yoga");
+    
+    private String apiValue;
+    
+    private Type(String apiValue) {
+        this.apiValue = apiValue;
+    }
+    
+    public static Type fromApiValue(String value) {
+        for (Type rtn : values()) {
+            if (rtn.apiValue.equals(value)) {
+                return rtn;
+            }
+        }
+        
+        return Unknown;
+    }
+    
+    public String getApiValue() {
+        return apiValue;
+    }
 }

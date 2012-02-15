@@ -20,19 +20,20 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.pc.dailymile.utils.Type;
 
-public class TypeConverter implements JsonDeserializer<Type> {
+public class TypeConverter implements JsonDeserializer<Type>, JsonSerializer<Type> {
 
-    @SuppressWarnings("unchecked")
     public Type deserialize(JsonElement json, java.lang.reflect.Type typeOfT,
             JsonDeserializationContext context) throws JsonParseException {
-        Type ret;
-        try {
-            ret = Enum.valueOf((Class<Type>) typeOfT, json.getAsString());
-        } catch (IllegalArgumentException e) {
-            ret = Type.Unknown;
-        }
-        return ret;
+        
+        return Type.fromApiValue(json.getAsString());
+    }
+    
+    public JsonElement serialize(Type type, java.lang.reflect.Type typeOfT, JsonSerializationContext context) {
+        return new JsonPrimitive(type.getApiValue());
     }
 }
