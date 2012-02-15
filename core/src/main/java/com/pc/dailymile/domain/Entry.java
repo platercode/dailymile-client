@@ -45,6 +45,13 @@ import com.google.gson.annotations.SerializedName;
  *                        "value":3.1}
  *            },
  * "id":978880,
+ * "media": [{"preview": {"type":"image", "height":75, 
+ *                        "width":75, "url":\"http://....jpg"
+ *                       },
+ *            "content": {"type":"image","url":"http://....jpg","height":301,
+ *                        "width":520
+ *                       }
+ *            }],
  * "comments":[{"body":"Good job!  Welcome to DailyMile!",
  *              "created_at":"2010-02-15T05:54:16-06:00",
  *              "user":{"url":"http://www.dailymile.com/people/chazzerguy",
