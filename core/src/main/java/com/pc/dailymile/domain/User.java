@@ -24,7 +24,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User implements Serializable {
+public class User implements Comparable<User>, Serializable {
 
     private String username;
     @SerializedName("display_name")
@@ -108,5 +108,18 @@ public class User implements Serializable {
         return new EqualsBuilder().append(imageUrl, other.imageUrl).append(name, other.name)
                 .append(url, other.url).append(username, other.username)
                 .append(location, other.location).append(goal, other.goal).isEquals();
+    }
+    
+    public int compareTo(User o) {
+        int nameVal = o.getName().compareTo(getName());
+        if (nameVal == 0) {
+            if (this.equals(o)) {
+                // they are truly equal
+                return nameVal;
+            }
+            // use the username as the tie breaker
+            return o.getUsername().compareTo(getUsername());
+        }
+        return nameVal;
     }
 }

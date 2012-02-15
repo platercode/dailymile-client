@@ -32,6 +32,8 @@ public class DailyMileUtil {
 
     private static final String USER_AND_FRIENDS_STREAM_PAGED_URL =
         "https://api.dailymile.com/entries/friends.json?page={0}";
+    
+    private static final String FRIENDS_URL = "https://api.dailymile.com/people/{0}/friends.json";
 
     private static final String USER_URL = "https://api.dailymile.com/people/{0}.json";
 
@@ -93,5 +95,9 @@ public class DailyMileUtil {
 
     public static String buildCommentUrl(Long id) {
         return MessageFormat.format(COMMENT_URL, id.toString());
+    }
+    
+    public static String buildFriendsUrl(String username) {
+        return MessageFormat.format(FRIENDS_URL, username);
     }
 }

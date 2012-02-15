@@ -54,6 +54,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import com.pc.dailymile.domain.Entry;
+import com.pc.dailymile.domain.Friends;
 import com.pc.dailymile.domain.User;
 import com.pc.dailymile.domain.UserAndFriendsStreamIterator;
 import com.pc.dailymile.domain.UserStream;
@@ -250,6 +251,11 @@ public class DailyMileClient {
     public Entry getEntry(Long id) {
         return DailyMileUtil.getGson().fromJson(getResource(DailyMileUtil.buildEntryUrl(id)),
                 Entry.class);
+    }
+    
+    public Friends getFriends(String username) {
+        return DailyMileUtil.getGson().fromJson(
+                getResource(DailyMileUtil.buildFriendsUrl(username)), Friends.class);
     }
 
     /**
