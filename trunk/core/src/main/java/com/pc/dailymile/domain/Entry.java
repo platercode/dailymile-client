@@ -19,6 +19,7 @@ package com.pc.dailymile.domain;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -72,6 +73,7 @@ public class Entry implements Comparable<Entry>, Serializable {
     @SerializedName("at")
     private Date date;
     private Set<Comment> comments;
+    private Set<Media> media;
 
     public Entry() {
 
@@ -128,17 +130,28 @@ public class Entry implements Comparable<Entry>, Serializable {
         this.comments = new TreeSet<Comment>(comments);
     }
 
+    public Set<Media> getMedia() {
+        if (comments == null) {
+            return Collections.emptySet();
+        }
+        return media;
+    }
+
+    public void setMedia(Set<Media> media) {
+        this.media = new HashSet<Media>(media);
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id).append("message", message).append("user",
                 user).append("workout", workout).append("date", date).append("comments",
-                getComments()).toString();
+                getComments()).append("media", media).toString();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(11, 31).append(id).append(message).append(user).append(workout)
-                .append(date).append(comments).toHashCode();
+                .append(date).append(comments).append(media).toHashCode();
     }
 
     @Override
@@ -152,7 +165,7 @@ public class Entry implements Comparable<Entry>, Serializable {
         Entry other = (Entry) obj;
         return new EqualsBuilder().append(id, other.id).append(message, other.message).append(user,
                 other.user).append(workout, other.workout).append(date, other.date).append(
-                comments, other.comments).isEquals();
+                comments, other.comments).append(media, other.media).isEquals();
     }
 
     public int compareTo(Entry o) {
