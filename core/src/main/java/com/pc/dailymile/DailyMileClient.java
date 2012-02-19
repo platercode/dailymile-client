@@ -258,6 +258,16 @@ public class DailyMileClient {
                 getResource(DailyMileUtil.buildFriendsUrl(username)), Friends.class);
     }
 
+    public Long addNote(String note) {
+        Entry noteEntry = new Entry();
+        noteEntry.setMessage(note);
+        try {
+            return addEntry(noteEntry);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to add note", e);
+        }
+    }
+    
     /**
      * Generic method for adding a dailymile "entry". Currently an entry can be
      * a note or a workout
