@@ -47,6 +47,9 @@ public class Workout implements Serializable {
     private String title;
     @SerializedName("completed_at")
     private Date completedDate;
+    private Long calories;
+    @SerializedName("route_id")
+    private Long routeId;
 
 
     public Workout() {
@@ -123,17 +126,33 @@ public class Workout implements Serializable {
         this.completedDate = completedDate;
     }
 
+    public Long getCalories() {
+        return calories;
+    }
+
+    public void setCalories(Long calories) {
+        this.calories = calories;
+    }
+
+    public Long getRouteId() {
+        return routeId;
+    }
+
+    public void setRouteId(Long routeId) {
+        this.routeId = routeId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("completed_at", completedDate)
                 .append("distance", distance).append("duration", duration).append("felt", felt)
-                .append("type", type).append("title", title).toString();
+                .append("type", type).append("title", title).append("calories", calories).append("routeId", routeId).toString();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(7, 29).append(completedDate).append(distance).append(duration)
-                .append(felt).append(type).append(title).toHashCode();
+                .append(felt).append(type).append(title).append(calories).append(routeId).toHashCode();
     }
 
     @Override
@@ -148,7 +167,7 @@ public class Workout implements Serializable {
         return new EqualsBuilder().append(completedDate, other.completedDate)
                 .append(distance, other.distance).append(duration, other.duration)
                 .append(felt, other.felt).append(type, other.type).append(title, other.title)
-                .isEquals();
+                .append(calories, other.calories).append(routeId, other.routeId).isEquals();
     }
 
 }
