@@ -55,6 +55,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.pc.dailymile.domain.Entry;
 import com.pc.dailymile.domain.Friends;
+import com.pc.dailymile.domain.Routes;
 import com.pc.dailymile.domain.User;
 import com.pc.dailymile.domain.UserAndFriendsStreamIterator;
 import com.pc.dailymile.domain.UserStream;
@@ -291,6 +292,11 @@ public class DailyMileClient {
         } catch (Exception e) {
             throw new RuntimeException("Unable to request friend: " + username, e);
         }
+    }
+    
+    public Routes getRoutes(String username) {
+        return DailyMileUtil.getGson().fromJson(
+                getResource(DailyMileUtil.buildUserRoutesUrl(username)), Routes.class);
     }
     
     /**
