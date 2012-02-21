@@ -111,14 +111,14 @@ public class User implements Comparable<User>, Serializable {
     }
     
     public int compareTo(User o) {
-        int nameVal = o.getName().compareTo(getName());
+        int nameVal = getName().compareTo(o.getName());
         if (nameVal == 0) {
             if (this.equals(o)) {
                 // they are truly equal
                 return nameVal;
             }
             // use the username as the tie breaker
-            return o.getUsername().compareTo(getUsername());
+            return getUsername().compareTo(o.getUsername());
         }
         return nameVal;
     }
