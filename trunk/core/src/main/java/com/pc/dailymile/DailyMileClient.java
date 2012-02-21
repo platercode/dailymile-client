@@ -253,11 +253,23 @@ public class DailyMileClient {
                 Entry.class);
     }
     
+    /**
+     * Get a user's friends
+     * 
+     * @param username
+     * @return Friends
+     */
     public Friends getFriends(String username) {
         return DailyMileUtil.getGson().fromJson(
                 getResource(DailyMileUtil.buildFriendsUrl(username)), Friends.class);
     }
 
+    /**
+     * Add a note
+     * 
+     * @param note
+     * @return
+     */
     public Long addNote(String note) {
         Entry noteEntry = new Entry();
         noteEntry.setMessage(note);
@@ -265,6 +277,19 @@ public class DailyMileClient {
             return addEntry(noteEntry);
         } catch (Exception e) {
             throw new RuntimeException("Unable to add note", e);
+        }
+    }
+    
+    /**
+     * Request that the provided user become your friend
+     * 
+     * @param username
+     */
+    public void requestFriend(String username) {
+        try {
+            doAuthenticatedPost(DailyMileUtil.buildRequestFriendUrl(username), "");
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to request friend: " + username, e);
         }
     }
     
