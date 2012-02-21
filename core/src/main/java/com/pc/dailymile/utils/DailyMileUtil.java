@@ -27,6 +27,9 @@ import com.pc.dailymile.domain.converters.TypeConverter;
 public class DailyMileUtil {
     public static final String ENTRIES_URL = "https://api.dailymile.com/entries.json";
 
+    //This hits the actual site, adding friends isn't part of the api
+    private static final String ADD_FRIEND = "https://www.dailymile.com/people/{0}/friends.json";
+    
     public static final String USER_AND_FRIENDS_STREAM_URL =
         "https://api.dailymile.com/entries/friends.json";
 
@@ -99,5 +102,9 @@ public class DailyMileUtil {
     
     public static String buildFriendsUrl(String username) {
         return MessageFormat.format(FRIENDS_URL, username);
+    }
+    
+    public static String buildRequestFriendUrl(String username) {
+        return MessageFormat.format(ADD_FRIEND, username);
     }
 }
