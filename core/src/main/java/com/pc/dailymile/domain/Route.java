@@ -22,12 +22,11 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.google.gson.annotations.SerializedName;
 import com.pc.dailymile.utils.Units;
 
 public class Route implements Comparable<Route>, Serializable {
 
-    private String id;
+    private Long id;
     private String name;
     private Distance distance;
 
@@ -36,12 +35,12 @@ public class Route implements Comparable<Route>, Serializable {
     }
     
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -75,8 +74,7 @@ public class Route implements Comparable<Route>, Serializable {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("id", id).append("name", name)
-                .append("distance", distance).toString();
+        return name;
     }
 
     @Override
