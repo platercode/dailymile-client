@@ -146,13 +146,15 @@ public class Workout implements Serializable {
     public String toString() {
         return new ToStringBuilder(this).append("completed_at", completedDate)
                 .append("distance", distance).append("duration", duration).append("felt", felt)
-                .append("type", type).append("title", title).append("calories", calories).append("routeId", routeId).toString();
+                .append("type", type).append("title", title).append("calories", calories)
+                .append("routeId", routeId).toString();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(7, 29).append(completedDate).append(distance).append(duration)
-                .append(felt).append(type).append(title).append(calories).append(routeId).toHashCode();
+                .append(felt).append(type).append(title).append(calories).append(routeId)
+                .toHashCode();
     }
 
     @Override

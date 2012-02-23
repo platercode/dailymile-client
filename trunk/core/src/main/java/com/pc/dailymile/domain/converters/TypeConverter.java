@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-*/
+ */
 package com.pc.dailymile.domain.converters;
 
 import com.google.gson.JsonDeserializationContext;
@@ -29,11 +29,12 @@ public class TypeConverter implements JsonDeserializer<Type>, JsonSerializer<Typ
 
     public Type deserialize(JsonElement json, java.lang.reflect.Type typeOfT,
             JsonDeserializationContext context) throws JsonParseException {
-        
+
         return Type.fromApiValue(json.getAsString());
     }
-    
-    public JsonElement serialize(Type type, java.lang.reflect.Type typeOfT, JsonSerializationContext context) {
+
+    public JsonElement serialize(Type type, java.lang.reflect.Type typeOfT,
+            JsonSerializationContext context) {
         return new JsonPrimitive(type.getApiValue());
     }
 }
