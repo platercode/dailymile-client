@@ -22,8 +22,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.google.gson.annotations.SerializedName;
-
 /*
  * {"type":"image", "height":75, 
  *                        "width":75, "url":\"http://....jpg"
