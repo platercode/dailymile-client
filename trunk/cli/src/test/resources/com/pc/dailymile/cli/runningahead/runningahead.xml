@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunningAHEADLog version="3.1">
+
+  <EventCollection>
+  	
+    <Event type="10" typeName="Run" subtype="10" subtypeName="Default" channel="11" id="foo" time="2008-04-28T10:27:36Z">
+      <Weight unit="Pound">185.0</Weight>
+      <Distance unit="mi">3.46</Distance>
+      <Duration seconds="1901.00">31:41</Duration>
+    </Event>
+   	
+   	<Event type="53" typeName="Yoga" subtype="10" subtypeName="Default" channel="11" id="foo" time="2010-11-09T16:30:00Z">
+      <Duration seconds="5400.00">1:30:00</Duration>
+      <Notes>Yoga</Notes>
+    </Event>
+    
+    <Event type="11" typeName="Bike" subtype="10" subtypeName="Default" channel="11" id="foo" time="2010-11-22T16:30:00Z">
+      <Distance unit="mi">20.80</Distance>
+      <Duration seconds="3600.00">1:00:00</Duration>
+      <Notes>Spinning</Notes>
+    </Event>
+    
+    <Event type="50" typeName="Gym workout" subtype="10" subtypeName="Default" channel="11" id="foo" time="2011-03-16T05:00:00Z">
+      <Weight unit="Pound">171.6</Weight>
+      <Duration seconds="4200.00">1:10:00</Duration>
+      <Notes>Shoulders and Triceps</Notes>
+    </Event>
+    
+    <Event type="51" typeName="Walking" subtype="10" subtypeName="Default" channel="11" id="foo" time="2011-10-23T12:44:00Z">
+      <Weight unit="Pound">171.6</Weight>
+      <Distance unit="mi">3.75</Distance>
+      <Duration seconds="6351.00">1:45:51</Duration>
+      <Notes>Crowders Mtn
+Hiking at Crowder's Mountain with the Wifey.</Notes>
+    </Event>
+    
+    <Event type="20" typeName="Weights" subtype="10" subtypeName="Default" channel="11" id="foo" time="2010-10-11T05:00:00Z">
+      <Duration seconds="3600.00">1:00:00</Duration>
+      <Notes>Bi's and Tri's</Notes>
+    </Event>
+    
+    <Event type="52" typeName="Cardio workout" subtype="10" subtypeName="Default" channel="11" id="foo" time="2011-01-11T17:00:00Z">
+      <Weight unit="Pound">171.2</Weight>
+      <Duration seconds="7200.00">2:00:00</Duration>
+      <Notes>Plyometrics &amp; Back  &amp; Core</Notes>
+    </Event>
+    
+    <Event type="54" typeName="Hiking" subtype="10" subtypeName="Default" channel="11" id="foo" time="2010-10-03T19:26:00Z">
+      <Distance unit="mi">5.97</Distance>
+      <Duration seconds="11400.00">3:10:00</Duration>
+      <Notes>Hiking with a 50+lb Pack</Notes>
+    </Event>
+    
+   </EventCollection>
+
+</RunningAHEADLog>
