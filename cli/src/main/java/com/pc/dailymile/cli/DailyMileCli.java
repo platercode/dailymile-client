@@ -10,6 +10,7 @@ import java.util.Properties;
 import com.pc.dailymile.DailyMileClient;
 import com.pc.dailymile.auth.DailyMileAuthenticator;
 import com.pc.dailymile.cli.nikeplus.NikeConverter;
+import com.pc.dailymile.cli.runningahead.RunningAheadConverter;
 
 public class DailyMileCli {
 
@@ -24,7 +25,7 @@ public class DailyMileCli {
 			dmc = configureDMCFromPrompts();
 		}
 		
-		String converter = getUserInput("Please enter the converison type, allowed types: [nikeplus]");
+		String converter = getUserInput("Please enter the converison type, allowed types: [nikeplus, runningahead]");
 		
 		String inputFilePath = getUserInput("Please enter full path to input file:");
 		
@@ -32,7 +33,11 @@ public class DailyMileCli {
 			NikeConverter nike = new NikeConverter(inputFilePath);
 			long total = nike.doConversion(dmc);
 			System.out.println("Converted " + total + " runs");
-		} else {
+		} else if (converter.equalsIgnoreCase("runningahead")) {
+            RunningAheadConverter runningAhead = new RunningAheadConverter(inputFilePath);
+            long total = runningAhead.doConversion(dmc);
+            System.out.println("Converted " + total + " runs");
+        } else {
 			System.out.println("unknown conversion requested");
 			System.exit(1);
 		}
