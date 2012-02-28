@@ -2,8 +2,6 @@ package com.pc.dailymile.cli.runningahead;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,8 +24,6 @@ import com.pc.dailymile.utils.Type;
 import com.pc.dailymile.utils.Units;
 
 /**
- * Yoga Bike Gym workout Walking Weights Cardio workout Run Hiking
- * 
  * @author jplater
  * 
  */
@@ -97,7 +93,6 @@ public class RunningAheadConverter extends Converter {
     // scoped for testing
     protected Workout createWorkout(Node event) {
         Workout wo = new Workout();
-        // TODO: pare from type
         wo.setType(parseWorkoutType((Element)event));
 
         wo.setDuration(parseDuration(event));

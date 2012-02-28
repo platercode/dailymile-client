@@ -19,6 +19,7 @@ package com.pc.dailymile.domain.converters;
 import java.lang.reflect.Type;
 import java.util.Date;
 
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
@@ -33,7 +34,8 @@ import com.google.gson.JsonSerializer;
 public class DateConverter implements JsonDeserializer<Date>, JsonSerializer<Date> {
 
     // 2010-12-25T12:15:00Z
-    private DateTimeFormatter deserializeFormatter = ISODateTimeFormat.dateTimeNoMillis(); 
+    private DateTimeFormatter deserializeFormatter = 
+            ISODateTimeFormat.dateTimeNoMillis().withZone(DateTimeZone.UTC); 
     
     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
         throws JsonParseException {
