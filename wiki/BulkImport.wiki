@@ -1,0 +1,26 @@
+# download dailymile-cli-2.1.jar from the download page
+# retrieve your oauth token as follows:
+## go to https://api.dailymile.com/oauth/authorize?response_type=token&client_id=pMy0L5dQOE5E3m1nUc4c5VlcS0Cgmz3aya6erjKx&redirect_uri=www.dailymile.com
+## enter login information (if prompted) and then allow access for "Plater's Code Bulk Import"
+## you will be redirected to an invalid page, that is expected.  Grab the oauth token from the url (it's the long string after access_token=).  You will need this later
+# from a command prompt (such as cmd or cygwin on windows) run the executable jar.  Below is an example run with <...> indicating where you need to provide information.  You can skip the first two prompts since I provided the oauth url above.
+
+$ java -jar dailymile-cli-2.1.jar
+
+Please enter your client id:
+
+Please enter your redirect url:
+
+Please open a brower and go to:
+
+Please enter your oauth token:
+
+<PASTE OAUTH TOKEN HERE (captured above)>
+
+Please enter the converison type, allowed types: [nikeplus,runningahead]
+
+<runningahead OR nikeplus>
+
+Please enter full path to input file:
+
+<PASTE PATH TO FILE HERE>
