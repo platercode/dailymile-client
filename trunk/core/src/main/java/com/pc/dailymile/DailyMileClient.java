@@ -55,6 +55,8 @@ import org.apache.http.util.EntityUtils;
 
 import com.pc.dailymile.domain.Entry;
 import com.pc.dailymile.domain.Friends;
+import com.pc.dailymile.domain.PopularStreamIterator;
+import com.pc.dailymile.domain.PublicStreamIterator;
 import com.pc.dailymile.domain.Routes;
 import com.pc.dailymile.domain.User;
 import com.pc.dailymile.domain.UserAndFriendsStreamIterator;
@@ -187,6 +189,27 @@ public class DailyMileClient {
     
     public Iterator<Entry> getUserAndFriendsEntries(EntryCriteria criteria) {
         return new UserAndFriendsStreamIterator(this, criteria);
+    }
+    
+    
+    public UserStream getPublicStream(int page, EntryCriteria criteria) {
+        return DailyMileUtil.getGson().fromJson(
+                getResource(DailyMileUtil.buildPublicStreamUrl(page, criteria)),
+                UserStream.class);
+    }
+    
+    public Iterator<Entry> getPublicEntries(EntryCriteria criteria) {
+        return new PublicStreamIterator(this, criteria);
+    }
+    
+    public UserStream getPopularStream(int page, EntryCriteria criteria) {
+        return DailyMileUtil.getGson().fromJson(
+                getResource(DailyMileUtil.buildPopularStreamUrl(page, criteria)),
+                UserStream.class);
+    }
+    
+    public Iterator<Entry> getPopularEntries(EntryCriteria criteria) {
+        return new PopularStreamIterator(this, criteria);
     }
 
     /**

@@ -27,6 +27,8 @@ import com.pc.dailymile.domain.converters.TypeConverter;
 public class DailyMileUtil {
     public static final String ENTRIES_URL = "https://api.dailymile.com/entries.json";
 
+    public static final String PUBLIC_STREAM_PAGED_URL = ENTRIES_URL + "?page={0}";
+    
     //This hits the actual site, adding friends isn't part of the api
     private static final String ADD_FRIEND = "https://www.dailymile.com/people/{0}/friends.json";
     
@@ -35,6 +37,9 @@ public class DailyMileUtil {
 
     private static final String USER_AND_FRIENDS_STREAM_PAGED_URL =
         "https://api.dailymile.com/entries/friends.json?page={0}";
+    
+    private static final String POPULAR_STREAM_PAGED_URL =
+            "https://api.dailymile.com/entries/popular.json?page={0}";
     
     private static final String USER_ROUTES = "https://api.dailymile.com/people/{0}/routes.json";
     
@@ -84,6 +89,32 @@ public class DailyMileUtil {
     public static String buildUserAndFriendsStreamUrl(int pageNumber, EntryCriteria query) {
         StringBuilder rtn = new StringBuilder();
         rtn.append(MessageFormat.format(USER_AND_FRIENDS_STREAM_PAGED_URL, pageNumber));
+        if (query != null) {
+            String queryString = query.buildQueryString();
+            if (queryString != null && queryString.length() > 0) {
+                rtn.append("&").append(queryString);
+            }
+        }
+
+        return rtn.toString();
+    }
+    
+    public static String buildPublicStreamUrl(int pageNumber, EntryCriteria query) {
+        StringBuilder rtn = new StringBuilder();
+        rtn.append(MessageFormat.format(PUBLIC_STREAM_PAGED_URL, pageNumber));
+        if (query != null) {
+            String queryString = query.buildQueryString();
+            if (queryString != null && queryString.length() > 0) {
+                rtn.append("&").append(queryString);
+            }
+        }
+
+        return rtn.toString();
+    }
+    
+    public static String buildPopularStreamUrl(int pageNumber, EntryCriteria query) {
+        StringBuilder rtn = new StringBuilder();
+        rtn.append(MessageFormat.format(POPULAR_STREAM_PAGED_URL, pageNumber));
         if (query != null) {
             String queryString = query.buildQueryString();
             if (queryString != null && queryString.length() > 0) {
