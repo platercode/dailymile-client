@@ -60,7 +60,19 @@ import com.google.gson.annotations.SerializedName;
  *                      "photo_url":"http://s3.dmimg.com/pictures/users/1373/1251135465_avatar.jpg"
  *                      }
  *              }],
- * "likes":[]
+ * "likes":[{"created_at":"2012-04-11T02:08:31Z",
+ *           "user":{"username":"jplater",
+ *                   "display_name":"Jeff",
+ *                   "photo_url":"http://s1.dmimg.com/pictures/users/53726/1295325712_avatar.jpg",
+ *                   "url":"http://www.dailymile.com/people/jplater"
+ *                  }
+ *          },
+ *          {"created_at":"2012-04-12T04:36:17Z",
+ *           "user":{"username":"jplaterTest",
+ *                   "display_name":"Joey","photo_url":"http://s2.dmimg.com/pictures/users/54006/1329982339_avatar.jpg",
+ *                   "url":"http://www.dailymile.com/people/jplaterTest"
+ *                   }
+ *          }]
  * }
  */
 
@@ -74,6 +86,7 @@ public class Entry implements Comparable<Entry>, Serializable {
     private Date date;
     private Set<Comment> comments;
     private Set<Media> media;
+    private Set<Like> likes;
 
     public Entry() {
 
@@ -131,7 +144,7 @@ public class Entry implements Comparable<Entry>, Serializable {
     }
 
     public Set<Media> getMedia() {
-        if (comments == null) {
+        if (media == null) {
             return Collections.emptySet();
         }
         return media;
@@ -140,18 +153,29 @@ public class Entry implements Comparable<Entry>, Serializable {
     public void setMedia(Set<Media> media) {
         this.media = new HashSet<Media>(media);
     }
+    
+    public Set<Like> getLikes() {
+        if (likes == null) {
+            return Collections.emptySet();
+        }
+        return new TreeSet<Like>(likes);
+    }
+
+    public void setLikes(Set<Like> likes) {
+        this.likes = new TreeSet<Like>(likes);
+    }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this).append("id", id).append("message", message).append("user",
                 user).append("workout", workout).append("date", date).append("comments",
-                getComments()).append("media", media).toString();
+                getComments()).append("media", media).append("likes", getLikes()).toString();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(11, 31).append(id).append(message).append(user).append(workout)
-                .append(date).append(comments).append(media).toHashCode();
+                .append(date).append(comments).append(media).append(likes).toHashCode();
     }
 
     @Override
@@ -165,7 +189,7 @@ public class Entry implements Comparable<Entry>, Serializable {
         Entry other = (Entry) obj;
         return new EqualsBuilder().append(id, other.id).append(message, other.message).append(user,
                 other.user).append(workout, other.workout).append(date, other.date).append(
-                comments, other.comments).append(media, other.media).isEquals();
+                comments, other.comments).append(media, other.media).append(likes, other.likes).isEquals();
     }
 
     public int compareTo(Entry o) {
