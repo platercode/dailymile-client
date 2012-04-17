@@ -264,6 +264,19 @@ public class DailyMileClient {
             throw new RuntimeException("Unable to add comment", e);
         }
     }
+    
+    /**
+     * Like an entry
+     * 
+     * @param id id of the entry to like
+     */
+    public void likeEntry(Long id) {
+        try {
+            doAuthenticatedPost(DailyMileUtil.buildLikeUrl(id), "");
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to like entry", e);
+        }
+    }
 
     /**
      * Gets an entry by id

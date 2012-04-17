@@ -54,6 +54,8 @@ public class DailyMileUtil {
 
     private static final String USER_STREAM_PAGED_URL =
         "https://api.dailymile.com/people/{0}/entries.json?page={1}";
+    
+    private static final String LIKE_URL = "https://api.dailymile.com/entries/{0}/likes.json";
 
     // date format: 2010-03-29T21:25:09-04:00
     private static final GsonBuilder GSON_BUILDER = new GsonBuilder()
@@ -143,5 +145,9 @@ public class DailyMileUtil {
     
     public static String buildUserRoutesUrl(String username) {
         return MessageFormat.format(USER_ROUTES, username);
+    }
+    
+    public static String buildLikeUrl(Long id) {
+        return MessageFormat.format(LIKE_URL, id.toString());
     }
 }
