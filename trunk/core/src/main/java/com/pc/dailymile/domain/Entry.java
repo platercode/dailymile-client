@@ -69,7 +69,8 @@ import com.google.gson.annotations.SerializedName;
  *          },
  *          {"created_at":"2012-04-12T04:36:17Z",
  *           "user":{"username":"jplaterTest",
- *                   "display_name":"Joey","photo_url":"http://s2.dmimg.com/pictures/users/54006/1329982339_avatar.jpg",
+ *                   "display_name":"Joey",
+ *                   "photo_url":"http://s2.dmimg.com/pictures/users/54006/1329982339_avatar.jpg",
  *                   "url":"http://www.dailymile.com/people/jplaterTest"
  *                   }
  *          }]
@@ -189,7 +190,8 @@ public class Entry implements Comparable<Entry>, Serializable {
         Entry other = (Entry) obj;
         return new EqualsBuilder().append(id, other.id).append(message, other.message).append(user,
                 other.user).append(workout, other.workout).append(date, other.date).append(
-                comments, other.comments).append(media, other.media).append(likes, other.likes).isEquals();
+                comments, other.comments).append(media, other.media)
+                .append(likes, other.likes).isEquals();
     }
 
     public int compareTo(Entry o) {
