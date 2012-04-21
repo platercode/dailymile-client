@@ -16,10 +16,13 @@
 */
 package com.pc.dailymile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
+
+import javax.activation.MimetypesFileTypeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -43,6 +46,10 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.HttpEntityWrapper;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -314,6 +321,61 @@ public class DailyMileClient {
             return addEntry(noteEntry);
         } catch (Exception e) {
             throw new RuntimeException("Unable to add note", e);
+        }
+    }
+    
+    public Long addNoteWithImage(String note, File imageFile) throws Exception {
+        HttpPost request = new HttpPost(DailyMileUtil.ENTRIES_URL);
+        HttpResponse response = null;
+        try {
+            MultipartEntity mpEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+            mpEntity.addPart("media[data]",
+                    new FileBody(imageFile, "image/jpeg"));
+            mpEntity.addPart("media[type]", new StringBody("image"));
+            mpEntity.addPart("message", new StringBody(note));
+            mpEntity.addPart("[share_on_services][facebook]", new StringBody("false"));
+            mpEntity.addPart("[share_on_services][twitter]", new StringBody("false"));
+            mpEntity.addPart("oauth_token", new StringBody(oauthToken));
+
+            request.setEntity(mpEntity);
+            // send the request
+            response = httpClient.execute(request);
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == 401) {
+                throw new RuntimeException("unable to execute POST - url: "
+                    + DailyMileUtil.ENTRIES_URL
+                    + " body: "
+                    + note);
+            }
+            
+            if (statusCode == 201) {
+                Header loc = response.getFirstHeader("Location");
+                if (loc != null) {
+                    String locS = loc.getValue();
+                    if (!StringUtils.isBlank(locS) && locS.matches(".*/[0-9]+$")) {
+                        try {
+                            return NumberUtils.createLong(
+                                    locS.substring(locS.lastIndexOf("/") + 1));
+                        } catch (NumberFormatException e) {
+                            return null;
+                        }
+                    }
+                }
+            }
+            
+            return null;
+        } finally {
+            try {
+                if (response != null) {
+                    HttpEntity entity = response.getEntity();
+                    if (entity != null) {
+                        entity.consumeContent();
+                    }
+                }
+                //EntityUtils.consume(response.getEntity());
+            } catch (IOException e) {
+                // ignore
+            }
         }
     }
     
