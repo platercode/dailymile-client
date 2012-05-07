@@ -55,5 +55,9 @@
       <groupId>net.sf.practicalxml</groupId>
       <artifactId>practicalxml</artifactId>
     </dependency>
+    <dependency>
+      <groupId>net.sf.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+    </dependency>
   </dependencies>
 </project>
