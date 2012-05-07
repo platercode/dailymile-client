@@ -22,8 +22,6 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 
-import javax.activation.MimetypesFileTypeMap;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.http.Header;
