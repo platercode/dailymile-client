@@ -416,7 +416,7 @@ public class DailyMileClient {
         HttpPost request = new HttpPost(url + "?oauth_token=" + oauthToken);
         HttpResponse response = null;
         try {
-            HttpEntity entity = new StringEntity(body);
+            HttpEntity entity = new StringEntity(body, HTTP.UTF_8);
             // set the content type to json
             request.setHeader("Content-Type", "application/json; charset=utf-8");
             request.setEntity(entity);
