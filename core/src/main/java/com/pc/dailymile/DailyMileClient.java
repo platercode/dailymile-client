@@ -58,6 +58,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
+import com.google.gson.JsonPrimitive;
 import com.pc.dailymile.domain.Entry;
 import com.pc.dailymile.domain.Friends;
 import com.pc.dailymile.domain.PopularStreamIterator;
@@ -262,7 +263,7 @@ public class DailyMileClient {
      * @return the id of the comment that was added
      */
     public Long addComment(String comment, Long id) {
-        String body = "{\"body\":\"" + comment + "\"}";
+        String body = "{\"body\":" + new JsonPrimitive(comment).toString() + "}";
         try {
             return doAuthenticatedPost(DailyMileUtil.buildCommentUrl(id), body);
         } catch (Exception e) {
