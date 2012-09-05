@@ -41,8 +41,16 @@ public class EntryCriteria {
         this.since = since;
     }
     
+    public Date getSince() {
+        return this.since;
+    }
+    
     public void setUntil(Date until) {
         this.until = until;
+    }
+    
+    public Date getUntil() {
+        return this.until;
     }
     
     public String buildQueryString() {
