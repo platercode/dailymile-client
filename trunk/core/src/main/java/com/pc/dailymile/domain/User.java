@@ -92,8 +92,7 @@ public class User implements Comparable<User>, Serializable {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(imageUrl).append(name).append(url)
-                .append(username).append(location).append(goal).toHashCode();
+        return new HashCodeBuilder(17, 37).append(username).toHashCode();
     }
 
     @Override
@@ -105,9 +104,9 @@ public class User implements Comparable<User>, Serializable {
         if (getClass() != obj.getClass())
             return false;
         User other = (User) obj;
-        return new EqualsBuilder().append(imageUrl, other.imageUrl).append(name, other.name)
-                .append(url, other.url).append(username, other.username)
-                .append(location, other.location).append(goal, other.goal).isEquals();
+        return new EqualsBuilder().append(username, other.username).isEquals();
+        
+        
     }
     
     public int compareTo(User o) {
