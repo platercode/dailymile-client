@@ -55,7 +55,7 @@ public class DailyMileClientLiveTest {
                      "title":"Ran Around The Block"
                    }
            }
-        */
+        
         DailyMileClient client = new DailyMileClient(null);
         Entry e = client.getEntry(1321909L);
         Entry expected = new Entry();
@@ -94,5 +94,7 @@ public class DailyMileClientLiveTest {
         expected.setWorkout(workout);
         
         //assertEquals(expected, e);
+         
+         */
     }
 }
