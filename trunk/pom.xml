@@ -5,7 +5,7 @@
   <groupId>com.pc.dailymile</groupId>
   <artifactId>dailymile</artifactId>
   <packaging>pom</packaging>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.2</version>
 
   <url>http://code.google.com/p/dailymile-client/</url>
 
