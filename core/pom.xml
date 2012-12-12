@@ -4,13 +4,13 @@
   <parent>
     <groupId>com.pc.dailymile</groupId>
     <artifactId>dailymile</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2</version>
   </parent>
 
   <groupId>com.pc.dailymile</groupId>
   <artifactId>dailymile-client</artifactId>
   <packaging>jar</packaging>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.2</version>
   <name>dailymile client library</name>
 
   <build>
