@@ -59,6 +59,7 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.JsonPrimitive;
+import com.pc.dailymile.domain.DailymissionStreamIterator;
 import com.pc.dailymile.domain.Entry;
 import com.pc.dailymile.domain.Friends;
 import com.pc.dailymile.domain.PopularStreamIterator;
@@ -394,6 +395,16 @@ public class DailyMileClient {
     public Routes getRoutes(String username) {
         return DailyMileUtil.getGson().fromJson(
                 getResource(DailyMileUtil.buildUserRoutesUrl(username)), Routes.class);
+    }
+    
+    public Iterator<Entry> getDailymissionEntries(EntryCriteria criteria) {
+        return new DailymissionStreamIterator(this, criteria);
+    }
+    
+    public UserStream getDailymissionStream(int page, EntryCriteria criteria) {
+        return DailyMileUtil.getGson().fromJson(
+                getResource(DailyMileUtil.buildDailymissionStreamUrl(page, criteria)),
+                UserStream.class);
     }
     
     /**
